@@ -25,6 +25,16 @@ public class Foutcity {
 
     private String schedule;
 
+    private String start;
+
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
     private String day;
 
     public int getId() {

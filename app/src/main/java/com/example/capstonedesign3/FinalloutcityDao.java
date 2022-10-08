@@ -3,6 +3,7 @@ package com.example.capstonedesign3;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -21,6 +22,9 @@ public interface FinalloutcityDao {
 
     @Query("SELECT * FROM Finalloutcity")
     List<Finalloutcity> getFinalloutcityAll();
+
+    @Query("SELECT * FROM Finalloutcity WHERE Day = :day")
+    List<Finalloutcity> getFday(String day);
 
     @Query("DELETE FROM Finalloutcity WHERE Day = :day")
     void delday(String day);
