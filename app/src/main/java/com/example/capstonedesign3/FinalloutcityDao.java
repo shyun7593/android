@@ -23,8 +23,14 @@ public interface FinalloutcityDao {
     @Query("SELECT * FROM Finalloutcity")
     List<Finalloutcity> getFinalloutcityAll();
 
+    @Query("UPDATE Finalloutcity SET Arrtime = :arrtime WHERE Id = :id")
+    void updateset(String arrtime, int id);
+
     @Query("SELECT * FROM Finalloutcity WHERE Day = :day")
     List<Finalloutcity> getFday(String day);
+
+    @Query("SELECT DISTINCT * FROM Finalloutcity WHERE Day = :day")
+    List<Finalloutcity> getData(String day);
 
     @Query("DELETE FROM Finalloutcity WHERE Day = :day")
     void delday(String day);

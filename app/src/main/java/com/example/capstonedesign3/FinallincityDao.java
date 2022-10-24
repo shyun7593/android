@@ -21,6 +21,9 @@ public interface FinallincityDao {
     @Delete
     void delete(Finallincity finallincity);
 
+    @Query("UPDATE Finallincity SET Arrtime = :arrtime WHERE Id = :id")
+    void updateset(String arrtime, int id);
+
     @Query("SELECT * FROM Finallincity")
     List<Finallincity> getFinallincityAll();
 

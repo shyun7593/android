@@ -53,6 +53,368 @@ public class MainActivity extends AppCompatActivity {
     private Finallincity finallincity = new Finallincity();
     private Finalloutcity finalloutcity = new Finalloutcity();
 
+    public class APIExplorer {
+        public String Getbus() {
+            String nowDay = "";
+            switch (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+                case 1:
+                    nowDay = "일";
+                    break;
+                case 2:
+                    nowDay = "월";
+                    break;
+                case 3:
+                    nowDay = "화";
+                    break;
+                case 4:
+                    nowDay = "수";
+                    break;
+                case 5:
+                    nowDay = "목";
+                    break;
+                case 6:
+                    nowDay = "금";
+                    break;
+                case 7:
+                    nowDay = "토";
+                    break;
+            }
+            FinallincityDatabase finallincityDatabase = Room.databaseBuilder(getApplicationContext(), FinallincityDatabase.class, "finallincity.db")
+                    .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
+                    .build();
+            finallincityDao = finallincityDatabase.finallincityDao();
+            List<Finallincity> finallincities = finallincityDao.getFinday(nowDay);
+            FinalloutcityDatabase finalloutcityDatabase = Room.databaseBuilder(getApplicationContext(), FinalloutcityDatabase.class, "finalloutcity.db")
+                    .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
+                    .build();
+            finalloutcityDao = finalloutcityDatabase.finalloutcityDao();
+            List<Finalloutcity> finalloutcities = finalloutcityDao.getFday(nowDay);
+            JSONArray ab = new JSONArray();
+            if (finalloutcities.size() > 0) {
+                for (int i = 0; i < finalloutcities.size(); i++) {
+                    try {
+                        Thread.sleep(200);
+                        JSONObject object = new JSONObject(finalloutcities.get(i).getFirstpath());
+                        int e = finalloutcities.get(i).getId();
+                        JSONArray array = (JSONArray) object.get("subpath");
+                        JSONObject jsonObject = (JSONObject) array.get(1);
+                        Log.i("hhhii", jsonObject.toString());
+                        if (jsonObject.getInt("cityCode") != 1000) {
+                            if (jsonObject.get("type").equals("버스")) {
+                                StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/BusSttnInfoInqireService/getCrdntPrxmtSttnList"); /*URL*/
+                                urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=r9UuVdEP%2F9NIeef7vzX%2BbgRBAuOq5GSBJeSp2kV9FMiR3bbRRNeuUDfoxTFzvC0DS7CrYt8osMbMH9HwnZoVHg%3D%3D"); /*Service Key*/
+                                urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+                                urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("50", "UTF-8")); /*한 페이지 결과 수*/
+                                urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*데이터 타입(xml, json)*/
+                                urlBuilder.append("&" + URLEncoder.encode("gpsLati", "UTF-8") + "=" + jsonObject.get("sy")); /*WGS84 위도 좌표*/
+                                urlBuilder.append("&" + URLEncoder.encode("gpsLong", "UTF-8") + "=" + jsonObject.get("sx")); /*WGS84 경도 좌표*/
+                                URL url = new URL(urlBuilder.toString());
+                                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                conn.setRequestMethod("GET");
+                                conn.setRequestProperty("Content-type", "application/json");
+                                System.out.println("Response code: " + conn.getResponseCode());
+                                BufferedReader rd;
+                                if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                                    rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                                } else {
+                                    rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                                }
+                                StringBuilder sb = new StringBuilder();
+                                String line;
+                                while ((line = rd.readLine()) != null) {
+                                    sb.append(line);
+                                }
+                                rd.close();
+                                conn.disconnect();
+                                Log.i("nkhi", sb.toString());
+                                String result = sb.toString();
+                                JSONObject job2 = new JSONObject(result);
+                                JSONObject job3 = (JSONObject) job2.get("response");
+                                JSONObject job4 = (JSONObject) job3.get("body");
+                                JSONObject job5 = (JSONObject) job4.get("items");
+                                JSONArray jarr = (JSONArray) job5.get("item");
+                                Log.i("nkhi2", jarr.toString());
+                                for (int q = 0; q < jarr.length(); q++) {
+                                    JSONObject job = new JSONObject();
+                                    JSONObject jsobj = (JSONObject) jarr.getJSONObject(q);
+                                    String str = jsobj.get("nodeid").toString();
+                                    String results = str.substring(3);
+                                    if (results.equals(jsonObject.getString("localID"))) {
+                                        job.put("citycode", jsobj.get("citycode"));
+                                        job.put("nodeid", jsobj.get("nodeid"));
+                                        job.put("id", e);
+                                        job.put("name", jsonObject.getInt("name"));
+                                        ab.put(job);
+                                    }
+                                }
+                            }
+                        } else {
+                            String result;
+                            StringBuffer sb = new StringBuffer();
+                            String apiKey = "QEX7ua4WgGErXl+jz2xtjmfPZ4rRn5TwjDIrOhpo5Ho";
+                            URL url = new URL("https://api.odsay.com/v1/api/realtimeStation?lang=0&stationID=" + jsonObject.get("startID") + "&routeIDs" + jsonObject.get("busID") + "&apiKey=" + URLEncoder.encode(apiKey, "UTF-8"));
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("GET");
+                            conn.setRequestProperty("Content-type", "application/json");
+                            conn.setDoOutput(true);
+                            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                            while ((result = br.readLine()) != null) {
+                                sb.append(result);
+                            }
+                            result = sb.toString();
+                            JSONObject jio = new JSONObject(result);
+                            if (jio.has("error")) {
+
+                            } else {
+                                JSONObject jsonObject1 = (JSONObject) jio.get("result");
+                                JSONArray array1 = (JSONArray) jsonObject1.get("real");
+                                JSONObject object1 = (JSONObject) array1.get(0);
+                                JSONObject object2 = (JSONObject) object1.get("arrival1");
+                                int r = object2.getInt("arrivalSec");
+                                int minute = (int) Math.floor((double) r / 60);
+                                int sec = r % 60;
+                                String arrtime = minute + "분 " + sec + "초";
+                                finalloutcityDao.updateset(arrtime, e);
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            JSONArray ac = new JSONArray();
+            if (finallincities.size() > 0) {
+                for (int i = 0; i < finallincities.size(); i++) {
+                    try {
+                        Thread.sleep(200);
+                        JSONArray jsonArr = new JSONArray(finallincities.get(i).getSubpath());
+                        int e = finallincities.get(i).getId();
+                        JSONObject jsonObj = (JSONObject) jsonArr.get(1);
+                        if (jsonObj.getInt("cityCode") != 1000) {
+                            if (jsonObj.get("type").equals("버스")) {
+                                Log.i("jiji", jsonObj.toString());
+                                StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/BusSttnInfoInqireService/getCrdntPrxmtSttnList"); /*URL*/
+                                urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=r9UuVdEP%2F9NIeef7vzX%2BbgRBAuOq5GSBJeSp2kV9FMiR3bbRRNeuUDfoxTFzvC0DS7CrYt8osMbMH9HwnZoVHg%3D%3D"); /*Service Key*/
+                                urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+                                urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("50", "UTF-8")); /*한 페이지 결과 수*/
+                                urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*데이터 타입(xml, json)*/
+                                urlBuilder.append("&" + URLEncoder.encode("gpsLati", "UTF-8") + "=" + jsonObj.get("sy")); /*WGS84 위도 좌표*/
+                                urlBuilder.append("&" + URLEncoder.encode("gpsLong", "UTF-8") + "=" + jsonObj.get("sx")); /*WGS84 경도 좌표*/
+                                URL url = new URL(urlBuilder.toString());
+                                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                conn.setRequestMethod("GET");
+                                conn.setRequestProperty("Content-type", "application/json");
+                                System.out.println("Response code: " + conn.getResponseCode());
+                                BufferedReader rd;
+                                if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                                    rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                                } else {
+                                    rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                                }
+                                StringBuilder sb = new StringBuilder();
+                                String line;
+                                while ((line = rd.readLine()) != null) {
+                                    sb.append(line);
+                                }
+                                rd.close();
+                                conn.disconnect();
+                                Log.i("nkhi", sb.toString());
+                                String result = sb.toString();
+                                JSONObject job2 = new JSONObject(result);
+                                JSONObject job3 = (JSONObject) job2.get("response");
+                                JSONObject job4 = (JSONObject) job3.get("body");
+                                JSONObject job5 = (JSONObject) job4.get("items");
+                                JSONArray jarr = (JSONArray) job5.get("item");
+                                Log.i("nkhi2", jarr.toString());
+                                for (int q = 0; q < jarr.length(); q++) {
+                                    JSONObject job = new JSONObject();
+                                    JSONObject jsobj = (JSONObject) jarr.getJSONObject(q);
+                                    String str = jsobj.get("nodeid").toString();
+                                    String results = str.substring(3);
+                                    Log.i("nknkh", results + "\n" + jsonObj.get("localID"));
+                                    if (results.equals(jsonObj.getString("localID"))) {
+                                        job.put("citycode", jsobj.get("citycode"));
+                                        job.put("nodeid", jsobj.get("nodeid"));
+                                        job.put("id", e);
+                                        job.put("name", jsonObj.getInt("name"));
+                                        ac.put(job);
+                                    }
+                                }
+                            }
+                        } else {
+                            String result;
+                            StringBuffer sb = new StringBuffer();
+                            String apiKey = "QEX7ua4WgGErXl+jz2xtjmfPZ4rRn5TwjDIrOhpo5Ho";
+                            URL url = new URL("https://api.odsay.com/v1/api/realtimeStation?lang=0&stationID=" + jsonObj.get("startID") + "&routeIDs" + jsonObj.get("busID") + "&apiKey=" + URLEncoder.encode(apiKey, "UTF-8"));
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("GET");
+                            conn.setRequestProperty("Content-type", "application/json");
+                            conn.setDoOutput(true);
+                            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                            while ((result = br.readLine()) != null) {
+                                sb.append(result);
+                            }
+                            result = sb.toString();
+                            JSONObject jio = new JSONObject(result);
+                            if (jio.has("error")) {
+
+                            } else {
+                                JSONObject object = (JSONObject) jio.get("result");
+                                Log.i("qwera", object.toString());
+                                JSONArray array1 = (JSONArray) object.get("real");
+                                Log.i("qwera",array1.toString());
+                                JSONObject object1 = (JSONObject) array1.get(0);
+                                JSONObject object2 = (JSONObject) object1.get("arrival1");
+                                int r = object2.getInt("arrivalSec");
+                                int minute = (int) Math.floor((double) r / 60);
+                                int sec = r % 60;
+                                String arrtime = minute + "분 " + sec + "초";
+                                finallincityDao.updateset(arrtime, e);
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            String de = outarrTime(ab);
+            String dd = inarrTime(ac);
+            return dd;
+        }
+
+        public String outarrTime(JSONArray a) {
+            FinalloutcityDatabase finalloutcityDatabase = Room.databaseBuilder(getApplicationContext(), FinalloutcityDatabase.class, "finalloutcity.db")
+                    .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
+                    .build();
+            finalloutcityDao = finalloutcityDatabase.finalloutcityDao();
+            if (a.length() < 0) {
+                return null;
+            }
+            try {
+                for (int i = 0; i < a.length(); i++) {
+                    JSONObject jsonObject = (JSONObject) a.get(i);
+                    Log.i("jkjkjk", jsonObject.getString("citycode") + " " + jsonObject.get("nodeid").toString());
+                    StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList"); /*URL*/
+                    urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=r9UuVdEP%2F9NIeef7vzX%2BbgRBAuOq5GSBJeSp2kV9FMiR3bbRRNeuUDfoxTFzvC0DS7CrYt8osMbMH9HwnZoVHg%3D%3D"); /*Service Key*/
+                    urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+                    urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("50", "UTF-8")); /*한 페이지 결과 수*/
+                    urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*데이터 타입(xml, json)*/
+                    urlBuilder.append("&" + URLEncoder.encode("cityCode", "UTF-8") + "=" + jsonObject.get("citycode")); /*WGS84 위도 좌표*/
+                    urlBuilder.append("&" + URLEncoder.encode("nodeId", "UTF-8") + "=" + jsonObject.get("nodeid")); /*WGS84 경도 좌표*/
+                    URL url = new URL(urlBuilder.toString());
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("Content-type", "application/json");
+                    System.out.println("Response code: " + conn.getResponseCode());
+                    BufferedReader rd;
+                    if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                        rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    } else {
+                        rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = rd.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    rd.close();
+                    conn.disconnect();
+                    String results = sb.toString();
+                    JSONObject job2 = new JSONObject(results);
+                    JSONObject job3 = (JSONObject) job2.get("response");
+                    JSONObject job4 = (JSONObject) job3.get("body");
+                    JSONObject job5 = (JSONObject) job4.get("items");
+                    JSONArray jarr = (JSONArray) job5.get("item");
+                    for (int q = 0; q < jarr.length(); q++) {
+                        JSONObject jsonObject1 = (JSONObject) jarr.get(q);
+                        Log.i("hhhhh", jsonObject1.getString("routeno") + "" + jsonObject.get("name"));
+                        if (jsonObject1.get("routeno") == jsonObject.get("name")) {
+                            Log.i("hhhhh2", "성공");
+                            String arrtime = "";
+                            int r = jsonObject1.getInt("arrtime");
+                            int minute = (int) Math.floor((double) r / 60);
+                            int sec = r % 60;
+                            arrtime = minute + "분 " + sec + "초";
+                            finalloutcityDao.updateset(arrtime, jsonObject.getInt("id"));
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return "null";
+        }
+
+        public String inarrTime(JSONArray a) {
+            FinallincityDatabase finallincityDatabase = Room.databaseBuilder(getApplicationContext(), FinallincityDatabase.class, "finallincity.db")
+                    .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
+                    .build();
+            finallincityDao = finallincityDatabase.finallincityDao();
+            if (a.length() < 0) {
+                return null;
+            }
+            try {
+                for (int i = 0; i < a.length(); i++) {
+                    JSONObject jsonObject = (JSONObject) a.get(i);
+                    Log.i("jkjkjk", jsonObject.getString("citycode") + " " + jsonObject.get("nodeid").toString());
+                    StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList"); /*URL*/
+                    urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=r9UuVdEP%2F9NIeef7vzX%2BbgRBAuOq5GSBJeSp2kV9FMiR3bbRRNeuUDfoxTFzvC0DS7CrYt8osMbMH9HwnZoVHg%3D%3D"); /*Service Key*/
+                    urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+                    urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("50", "UTF-8")); /*한 페이지 결과 수*/
+                    urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*데이터 타입(xml, json)*/
+                    urlBuilder.append("&" + URLEncoder.encode("cityCode", "UTF-8") + "=" + jsonObject.get("citycode")); /*WGS84 위도 좌표*/
+                    urlBuilder.append("&" + URLEncoder.encode("nodeId", "UTF-8") + "=" + jsonObject.get("nodeid")); /*WGS84 경도 좌표*/
+                    URL url = new URL(urlBuilder.toString());
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("Content-type", "application/json");
+                    System.out.println("Response code: " + conn.getResponseCode());
+                    BufferedReader rd;
+                    if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                        rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    } else {
+                        rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = rd.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    rd.close();
+                    conn.disconnect();
+                    String results = sb.toString();
+                    JSONObject job2 = new JSONObject(results);
+                    JSONObject job3 = (JSONObject) job2.get("response");
+                    JSONObject job4 = (JSONObject) job3.get("body");
+                    JSONObject job5 = (JSONObject) job4.get("items");
+                    JSONArray jarr = (JSONArray) job5.get("item");
+                    for (int q = 0; q < jarr.length(); q++) {
+                        JSONObject jsonObject1 = (JSONObject) jarr.get(q);
+                        Log.i("hhhhh", jsonObject1.getString("routeno") + "" + jsonObject.get("name"));
+                        if (jsonObject1.get("routeno") == jsonObject.get("name")) {
+                            Log.i("hhhhh2", "성공");
+                            String arrtime = "";
+                            int r = jsonObject1.getInt("arrtime");
+                            int minute = (int) Math.floor((double) r / 60);
+                            int sec = r % 60;
+                            arrtime = minute + "분 " + sec + "초";
+                            finallincityDao.updateset(arrtime, jsonObject.getInt("id"));
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return "null";
+        }
+    }
+
     public class onHTTPConnection {
         public String connectAndGet(Double sx, Double sy) {
             String apiKey = "QEX7ua4WgGErXl+jz2xtjmfPZ4rRn5TwjDIrOhpo5Ho";
@@ -126,6 +488,8 @@ public class MainActivity extends AppCompatActivity {
                                             if (trafiic.has("startLocalStationID")) {
                                                 busdata.put("localID", trafiic.get("startLocalStationID").toString());
                                             }
+                                            busdata.put("sx", trafiic.get("startX"));
+                                            busdata.put("sy", trafiic.get("startY"));
                                             inarray.put(busdata);
                                             break;
                                         case "1":
@@ -237,7 +601,6 @@ public class MainActivity extends AppCompatActivity {
             }
             fincityDao = indatabase.fincityDao();
             List<Fincity> fincities = fincityDao.getFincityAll();
-//            Log.i("dgat",incity.toString());
             if (fincities.size() == 0) {
                 return null;
             }
@@ -449,7 +812,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 String result;
                 StringBuffer st = new StringBuffer();
-                URL url = new URL("https://api.odsay.com/v1/api/searchPubTransPathT?lang=0&SX=" + sx + "&SY=" + sy + "&EX=127.2635&EY=37.0094&SearchType=1&apiKey=" + URLEncoder.encode(apiKey, "UTF-8"));
+                URL url = new URL("https://api.odsay.com/v1/api/searchPubTransPathT?&SX=" + sx + "&SY=" + sy + "&EX=127.2635&EY=37.0094&SearchType=1&apiKey=" + URLEncoder.encode(apiKey, "UTF-8"));
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Content-type", "application/json");
@@ -562,6 +925,7 @@ public class MainActivity extends AppCompatActivity {
                         String result;
                         StringBuffer st = new StringBuffer();
                         URL url = new URL("https://api.odsay.com/v1/api/searchPubTransPathT?lang=0&SX=" + sx + "&SY=" + sy + "&EX=" + jsonObj.get("sx") + "&EY=" + jsonObj.get("sy") + "&SearchType=0&apiKey=" + URLEncoder.encode(apiKey, "UTF-8"));
+                        Log.i("urlrr", url.toString());
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                         conn.setRequestMethod("GET");
                         conn.setRequestProperty("Content-type", "application/json");
@@ -572,7 +936,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         result = st.toString();
                         JSONObject jio = new JSONObject(result);
-                        Log.i("jio", jio.toString());
+                        Log.i("jiooo", jio.toString());
                         if (jio.has("error")) {
                             return "null";
                         }
@@ -622,6 +986,8 @@ public class MainActivity extends AppCompatActivity {
                                                     if (trafiic.has("startLocalStationID")) {
                                                         busdata.put("localID", trafiic.get("startLocalStationID").toString());
                                                     }
+                                                    busdata.put("sx", trafiic.get("startX"));
+                                                    busdata.put("sy", trafiic.get("startY"));
                                                     inarray.put(busdata);
                                                     break;
                                                 case "1":
@@ -873,7 +1239,7 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < outcity.toString().length(); i += chunkSize) {
                 Log.d("outcity4", outcity.toString().substring(i, Math.min(outcity.toString().length(), i + chunkSize)));
             }
-            return outcity.toString();
+            return q;
         }
 
         public String Outtime() {
@@ -955,7 +1321,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     Log.i("dsdfs", object1.toString());
                     Log.i("dsdfs", object1.getString("type"));
-                    switch (object2.getInt("trafficType")){
+                    switch (object2.getInt("trafficType")) {
                         case 4:
                             String result1;
                             StringBuffer st1 = new StringBuffer();
@@ -975,49 +1341,49 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject jjo1 = new JSONObject(result1).getJSONObject("result");
                             JSONArray ar = (JSONArray) jjo1.get("station");
                             JSONArray ac = new JSONArray();
-                            for(int aa = 0; aa<ar.length();aa++){
+                            for (int aa = 0; aa < ar.length(); aa++) {
                                 JSONObject ad = new JSONObject();
                                 JSONObject jii = (JSONObject) ar.get(aa);
                                 String qqe = jii.getString("arrivalTime");
                                 String qqq = jii.getString("departureTime");
                                 String[] qqq1 = qqq.split(":");
                                 String[] qqe1 = qqe.split(":");
-                                int arrival = Integer.parseInt(qqe1[0])*60 + Integer.parseInt(qqe1[1]);
-                                int departure = Integer.parseInt(qqq1[0])*60 + Integer.parseInt(qqq1[1]);
-                                ad.put("arrival",arrival);
-                                ad.put("departure",departure);
+                                int arrival = Integer.parseInt(qqe1[0]) * 60 + Integer.parseInt(qqe1[1]);
+                                int departure = Integer.parseInt(qqq1[0]) * 60 + Integer.parseInt(qqq1[1]);
+                                ad.put("arrival", arrival);
+                                ad.put("departure", departure);
                                 ac.put(ad);
                             }
                             JSONArray sortac = new JSONArray();
                             List<JSONObject> jsonvalue = new ArrayList<JSONObject>();
-                            for(int qq=0; qq<ac.length();qq++){
+                            for (int qq = 0; qq < ac.length(); qq++) {
                                 jsonvalue.add(ac.getJSONObject(qq));
                             }
                             Collections.sort(jsonvalue, new Comparator<JSONObject>() {
                                 @Override
                                 public int compare(JSONObject o1, JSONObject o2) {
-                                    int valA=0;
-                                    int valB=0;
+                                    int valA = 0;
+                                    int valB = 0;
                                     try {
                                         valA = o1.getInt("arrival");
                                         valB = o2.getInt("arrival");
 
-                                    } catch (JSONException e){
+                                    } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                    return Integer.compare(valA,valB);
+                                    return Integer.compare(valA, valB);
                                 }
                             });
-                            for(int qr = 0; qr<ac.length();qr++){
+                            for (int qr = 0; qr < ac.length(); qr++) {
                                 sortac.put(jsonvalue.get(qr));
                             }
-                            for(int nn = 0; nn<sortac.length();nn++){
+                            for (int nn = 0; nn < sortac.length(); nn++) {
                                 JSONObject de = (JSONObject) sortac.get(nn);
-                                if(de.getInt("arrival")<dayTimes.get(0).getTime() - array1.getInt("totalTime")){
-                                    timecheck.put("arrival",de.getInt("arrival"));
-                                    timecheck.put("departure",de.getInt("departure"));
+                                if (de.getInt("arrival") < dayTimes.get(0).getTime() - array1.getInt("totalTime")) {
+                                    timecheck.put("arrival", de.getInt("arrival"));
+                                    timecheck.put("departure", de.getInt("departure"));
                                     int wastetime = de.getInt("arrival") - de.getInt("departure");
-                                    timecheck.put("totaltime",wastetime);
+                                    timecheck.put("totaltime", wastetime);
                                 }
                             }
                             break;
@@ -1039,17 +1405,17 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject jjo2 = new JSONObject(result2).getJSONObject("result");
                             JSONArray jo2 = (JSONArray) jjo2.get("station");
                             JSONObject jji2 = (JSONObject) jo2.get(0);
-                            String[] nii = jji2.getString("schedule").replaceAll(System.getProperty("line.separator"),"/").replaceAll("\\(우등\\)","").split("/");
+                            String[] nii = jji2.getString("schedule").replaceAll(System.getProperty("line.separator"), "/").replaceAll("\\(우등\\)", "").split("/");
                             int nii2;
-                            for(int qw = 0;qw<nii.length;qw++){
+                            for (int qw = 0; qw < nii.length; qw++) {
                                 String[] jk = nii[qw].split(":");
-                               nii2 = Integer.parseInt(jk[0])*60+Integer.parseInt(jk[1]);
-                               if(nii2 < dayTimes.get(0).getTime()-array1.getInt("totalTime")){
-                                   timecheck.put("departure",nii2);
-                                   int arrival = nii2+array2.getInt("sectiontime");
-                                   timecheck.put("arrival",arrival);
-                                   timecheck.put("totaltime",array2.getInt("sectiontime"));
-                               }
+                                nii2 = Integer.parseInt(jk[0]) * 60 + Integer.parseInt(jk[1]);
+                                if (nii2 < dayTimes.get(0).getTime() - array1.getInt("totalTime")) {
+                                    timecheck.put("departure", nii2);
+                                    int arrival = nii2 + array2.getInt("sectiontime");
+                                    timecheck.put("arrival", arrival);
+                                    timecheck.put("totaltime", array2.getInt("sectiontime"));
+                                }
                             }
                             break;
                         case 6:
@@ -1068,23 +1434,23 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject jjo3 = new JSONObject(result3).getJSONObject("result");
                             JSONArray jo3 = (JSONArray) jjo3.get("station");
                             JSONObject jji3 = (JSONObject) jo3.get(0);
-                            String[] sde = jji3.getString("schedule").replaceAll(System.getProperty("line.separator"),"/").split("/");
+                            String[] sde = jji3.getString("schedule").replaceAll(System.getProperty("line.separator"), "/").split("/");
                             int nii3;
-                            for(int qw2 = 0; qw2< sde.length;qw2++){
+                            for (int qw2 = 0; qw2 < sde.length; qw2++) {
                                 String[] jk2 = sde[qw2].split(":");
-                                nii3 = Integer.parseInt(jk2[0])*60 + Integer.parseInt(jk2[1]);
-                                if(nii3 < dayTimes.get(0).getTime()-array1.getInt("totalTime")){
-                                    timecheck.put("departure",nii3);
+                                nii3 = Integer.parseInt(jk2[0]) * 60 + Integer.parseInt(jk2[1]);
+                                if (nii3 < dayTimes.get(0).getTime() - array1.getInt("totalTime")) {
+                                    timecheck.put("departure", nii3);
                                     int arrival = nii3 + array2.getInt("sectiontime");
-                                    timecheck.put("arrival",arrival);
-                                    timecheck.put("totaltime",array2.getInt("sectiontime"));
+                                    timecheck.put("arrival", arrival);
+                                    timecheck.put("totaltime", array2.getInt("sectiontime"));
                                 }
                             }
                             break;
                     }
                     int hour = 0;
                     int mintue = 0;
-                    switch (object3.getString("type")){
+                    switch (object3.getString("type")) {
                         case "버스":
                             String result1;
                             StringBuffer st1 = new StringBuffer();
@@ -1102,8 +1468,8 @@ public class MainActivity extends AppCompatActivity {
                             String firsttime = jo.getString("busFirstTime");
                             String[] q;
                             q = firsttime.split(":");
-                            int interval1=0;
-                            switch (nowDay){
+                            int interval1 = 0;
+                            switch (nowDay) {
                                 case "토":
                                     interval1 = jo.getInt("bus_Interval_Sat");
                                     break;
@@ -1115,13 +1481,13 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                             }
                             JSONArray jar1 = (JSONArray) jo.get("station");
-                            for(int k =0; k<jar1.length();k++){
+                            for (int k = 0; k < jar1.length(); k++) {
                                 JSONObject job1 = jar1.getJSONObject(k);
-                                if(object3.getInt("startID")== job1.getInt("stationID")){
+                                if (object3.getInt("startID") == job1.getInt("stationID")) {
                                     int gettime1 = (int) Math.ceil((double) 1.5 * job1.getInt("idx"));
                                     int r1 = (int) (Integer.parseInt(q[0]) * 60) + (int) (Integer.parseInt(q[1])) + gettime1;
                                     int t1 = timecheck.getInt("departure") - array3.getInt("totalTime");
-                                    if(interval1==0||r1>t1){
+                                    if (interval1 == 0 || r1 > t1) {
                                         finalloutcity.setDay(nowDay);
                                         finalloutcity.setFare(foutcities.get(i).getFare());
                                         finalloutcity.setStart(foutcities.get(i).getStart());
@@ -1134,16 +1500,20 @@ public class MainActivity extends AppCompatActivity {
                                         finalloutcity.setName(Name);
                                         finalloutcityDao.insert(finalloutcity);
                                     } else {
-                                        while(r1<t1){
+                                        while (r1 < t1) {
                                             r1 = r1 + interval1;
-                                            if(r1>t1){
-                                                r1=r1-interval1;
+                                            if (r1 > t1) {
+                                                r1 = r1 - interval1;
                                                 break;
                                             }
                                         }
                                         hour = (int) Math.floor((double) r1 / 60);
                                         mintue = r1 % 60;
-                                        timecheck.put("schedule",hour+":"+mintue);
+                                        if (mintue < 10) {
+                                            timecheck.put("schedule", hour + ":0" + mintue);
+                                        } else {
+                                            timecheck.put("schedule", hour + ":" + mintue);
+                                        }
                                     }
                                 }
                             }
@@ -1188,35 +1558,35 @@ public class MainActivity extends AppCompatActivity {
                             JSONArray arr = (JSONArray) jooo.get("time");
                             JSONArray subtime2 = new JSONArray();
                             subtime2.put(0);
-                            for(int m=0; m<arr.length();m++){
+                            for (int m = 0; m < arr.length(); m++) {
                                 String[] abc = new String[100];
-                                String[] subtime ;
+                                String[] subtime;
                                 JSONObject jn = (JSONObject) arr.get(m);
                                 String nn = jn.getString("list");
                                 int hou = jn.getInt("Idx");
                                 subtime = nn.split("\\s");
-                                for (int ss =0; ss< subtime.length;ss++){
+                                for (int ss = 0; ss < subtime.length; ss++) {
                                     abc = subtime[ss].split("\\(");
                                 }
-                                for (int yy =0; yy<abc.length;yy++){
-                                    if(yy%2==0){
-                                        int nk = Integer.parseInt(abc[yy])+hou*60;
+                                for (int yy = 0; yy < abc.length; yy++) {
+                                    if (yy % 2 == 0) {
+                                        int nk = Integer.parseInt(abc[yy]) + hou * 60;
                                         subtime2.put(nk);
                                     }
                                 }
                             }
                             int t1 = timecheck.getInt("departure") - array3.getInt("totalTime");
                             int a = 1;
-                            int b =0;
-                            while(true){
+                            int b = 0;
+                            while (true) {
                                 b = subtime2.getInt(a);
-                                if(b>t1){
-                                    b = subtime2.getInt(a-1);
+                                if (b > t1) {
+                                    b = subtime2.getInt(a - 1);
                                     break;
                                 }
                                 a++;
                             }
-                            if(b==0) {
+                            if (b == 0) {
                                 finalloutcity.setDay(nowDay);
                                 finalloutcity.setFare(foutcities.get(i).getFare());
                                 finalloutcity.setStart(foutcities.get(i).getStart());
@@ -1229,10 +1599,14 @@ public class MainActivity extends AppCompatActivity {
                                 finalloutcity.setName(Name);
                                 finalloutcityDao.insert(finalloutcity);
 
-                            }else {
+                            } else {
                                 hour = (int) Math.floor((double) b / 60);
                                 mintue = b % 60;
-                                timecheck.put("schedule", hour + ":" + mintue);
+                                if (mintue < 10) {
+                                    timecheck.put("schedule", hour + ":0" + mintue);
+                                } else {
+                                    timecheck.put("schedule", hour + ":" + mintue);
+                                }
                             }
                             break;
                     }
@@ -1274,7 +1648,7 @@ public class MainActivity extends AppCompatActivity {
                                     int gettime1 = (int) Math.ceil((double) 1.5 * job1.getInt("idx"));
                                     int r1 = (int) (Integer.parseInt(q[0]) * 60) + (int) (Integer.parseInt(q[1])) + gettime1;
                                     int t1 = timecheck.getInt("arrival") - (int) array1.getInt("totalTime");
-                                    if (interval1 == 0||r1>t1) {
+                                    if (interval1 == 0 || r1 > t1) {
                                         finalloutcity.setDay(nowDay);
                                         finalloutcity.setFare(foutcities.get(i).getFare());
                                         finalloutcity.setStart(foutcities.get(i).getStart());
@@ -1294,7 +1668,7 @@ public class MainActivity extends AppCompatActivity {
                                                 break;
                                             }
                                         }
-                                        int total = timecheck.getInt("totaltime")+array1.getInt("totalTime")+array3.getInt("totalTime");
+                                        int total = timecheck.getInt("totaltime") + array1.getInt("totalTime") + array3.getInt("totalTime");
                                         finalloutcity.setDay(nowDay);
                                         finalloutcity.setFare(foutcities.get(i).getFare());
                                         finalloutcity.setStart(foutcities.get(i).getStart());
@@ -1391,7 +1765,7 @@ public class MainActivity extends AppCompatActivity {
                                 finalloutcity.setName(Name);
                                 finalloutcityDao.insert(finalloutcity);
                             } else {
-                                int total = timecheck.getInt("totaltime")+array1.getInt("totalTime")+array3.getInt("totalTime");
+                                int total = timecheck.getInt("totaltime") + array1.getInt("totalTime") + array3.getInt("totalTime");
                                 finalloutcity.setDay(nowDay);
                                 finalloutcity.setFare(foutcities.get(i).getFare());
                                 finalloutcity.setStart(foutcities.get(i).getStart());
@@ -1400,7 +1774,7 @@ public class MainActivity extends AppCompatActivity {
                                 finalloutcity.setFirstpath(foutcities.get(i).getFirstpath());
                                 finalloutcity.setSecondpath(foutcities.get(i).getSecondpath());
                                 finalloutcity.setThirdpath(foutcities.get(i).getThirdpath());
-                                finalloutcity.setSchedule("운행정보가 없습니다.");
+                                finalloutcity.setSchedule(timecheck.getString("schedule"));
                                 finalloutcity.setName(Name);
                                 finalloutcityDao.insert(finalloutcity);
                             }
@@ -1408,8 +1782,14 @@ public class MainActivity extends AppCompatActivity {
                             break;
                     }
 
-
                 }
+                List<Finalloutcity> finalloutcities1 = finalloutcityDao.getData(nowDay);
+                String ddd = "";
+                for (int q = 0; q < finalloutcities1.size(); q++) {
+                    ddd = "스케쥴 " + finalloutcities1.get(q).getSchedule() + "\n"
+                            + "요일" + finalloutcities1.get(q).getDay();
+                }
+                return ddd;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1432,9 +1812,11 @@ public class MainActivity extends AppCompatActivity {
 
         protected String doInBackground(Object... objects) {
             onHTTPConnection urlconn = new onHTTPConnection();
+            APIExplorer apiExplorer = new APIExplorer();
 //            String GET_result = urlconn.connectAndGet(sx, sy);
-            String GET_result2 = urlconn.outGet(sx, sy);
-            return GET_result2;
+//            String GET_result2 = urlconn.outGet(sx, sy);
+            String GET_result3 = apiExplorer.Getbus();
+            return GET_result3;
         }
 
         protected void onProgressUpdate(Object... objects) {
@@ -1471,15 +1853,10 @@ public class MainActivity extends AppCompatActivity {
         fincityDao.clearAll();
         foutcityDao = outdatabase.foutcityDao();
         foutcityDao.clearAll();
-
-        Double sx = 127.0729;
-        Double sy = 37.5668;
+        Double sx = 126.9748;
+        Double sy = 37.6193;
         HttpFunc httpFunc = new HttpFunc(sx, sy);
         httpFunc.execute();
-//
-
-//        Log.d("MyTag",httpFunc.toString());
-//        Log.i("week", Calendar.DAY_OF_WEEK+"");
 
         textView = (TextView) findViewById(R.id.textView);
     }

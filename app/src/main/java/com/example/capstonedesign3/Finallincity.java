@@ -24,6 +24,16 @@ public class Finallincity {
 
     private String start;
 
+    private String arrtime;
+
+    public String getArrtime() {
+        return arrtime;
+    }
+
+    public void setArrtime(String arrtime) {
+        this.arrtime = arrtime;
+    }
+
     public int getId() {
         return id;
     }
