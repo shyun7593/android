@@ -29,7 +29,7 @@ public interface FinalloutcityDao {
     @Query("SELECT * FROM Finalloutcity WHERE Day = :day")
     List<Finalloutcity> getFday(String day);
 
-    @Query("SELECT DISTINCT * FROM Finalloutcity WHERE Day = :day")
+    @Query("SELECT DISTINCT * FROM Finalloutcity WHERE Day = :day ORDER BY totalTime ASC")
     List<Finalloutcity> getData(String day);
 
     @Query("DELETE FROM Finalloutcity WHERE Day = :day")

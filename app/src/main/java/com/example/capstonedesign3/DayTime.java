@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "DayTime")
 public class DayTime {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     private int time;

@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/User/AndroidStudioProjects/CapstoneDesign3/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/CapstoneDesign3/app/src/main/res/drawable/expand_less-48px.xml" value="0.1185" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/CapstoneDesign3/app/src/main/res/drawable/expand_more-48px.xml" value="0.1185" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/CapstoneDesign3/app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="..\:/Users/User/AndroidStudioProjects/CapstoneDesign3/app/src/main/res/xml/network_security_config.xml" value="0.1" />
       </map>
     </option>

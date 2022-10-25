@@ -24,6 +24,9 @@ public interface FinallincityDao {
     @Query("UPDATE Finallincity SET Arrtime = :arrtime WHERE Id = :id")
     void updateset(String arrtime, int id);
 
+    @Query("SELECT DISTINCT * FROM Finallincity WHERE Day = :day ORDER BY totalTime ASC")
+    List<Finallincity> getData(String day);
+
     @Query("SELECT * FROM Finallincity")
     List<Finallincity> getFinallincityAll();
 

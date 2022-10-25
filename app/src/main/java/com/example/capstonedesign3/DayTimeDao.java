@@ -23,6 +23,12 @@ public interface DayTimeDao {
     @Query("SELECT * FROM DayTime")
     List<DayTime> getDayTimeAll();
 
+    @Query("UPDATE DayTime SET time =:time WHERE day=:day")
+    void updateday(int time, String day);
+
+    @Query("DELETE FROM DayTime")
+    void del();
+
     @Query("SELECT * FROM DayTime WHERE day=:day")
     List<DayTime> getDay(String day);
 }
