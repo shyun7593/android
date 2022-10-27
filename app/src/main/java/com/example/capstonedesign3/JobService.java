@@ -35,6 +35,23 @@ import java.util.Comparator;
 import java.util.List;
 
 public class JobService extends android.app.job.JobService {
+    TextView textView;
+    TextView textView2;
+    TextView textView3;
+    TextView detail0;
+    TextView detail1;
+    TextView detail2;
+    TextView detail3;
+    TextView detail4;
+    TextView detail5;
+    TextView detail6;
+    TextView arrow1;
+    TextView arrow2;
+    TextView arrow3;
+    TextView arrow4;
+    TextView arrow5;
+    TableLayout detail;
+    Button button;
     private SuttleDao suttleDao;
     private FincityDao fincityDao;
     private FoutcityDao foutcityDao;
@@ -54,8 +71,33 @@ public class JobService extends android.app.job.JobService {
     private JobParameters parameters;
 
     @Override
+    // 여기에 잡스케줄러가 할 일을 쓰시면 됩니다.
     public boolean onStartJob(JobParameters params) {
         this.parameters = params;
+        String nowDay = "";
+        switch (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+            case 1:
+                nowDay = "일";
+                break;
+            case 2:
+                nowDay = "월";
+                break;
+            case 3:
+                nowDay = "화";
+                break;
+            case 4:
+                nowDay = "수";
+                break;
+            case 5:
+                nowDay = "목";
+                break;
+            case 6:
+                nowDay = "금";
+                break;
+            case 7:
+                nowDay = "토";
+                break;
+        }
         FoutcityDatabase outdatabase = Room.databaseBuilder(getApplicationContext(), FoutcityDatabase.class, "foutcity2.db")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
@@ -83,8 +125,9 @@ public class JobService extends android.app.job.JobService {
         suttleDatabase.close();
         indatabase.close();
         outdatabase.close();
-        httpFunc = new HttpFunc(sx, sy);
+        httpFunc = new HttpFunc(sx, sy, nowDay);
         httpFunc.execute(params);
+        Log.i("hello","hello");
         jobFinished(params,false);
         return false;
     }
@@ -102,10 +145,11 @@ public class JobService extends android.app.job.JobService {
 
     private class HttpFunc extends AsyncTask<Object, Object, String> {
         Double sx, sy;
-
-        public HttpFunc(Double sx, Double sy) {
+        String nowDay;
+        public HttpFunc(Double sx, Double sy, String nowDay) {
             this.sx = sx;
             this.sy = sy;
+            this.nowDay = nowDay;
         }
 
         protected void onPreExecute() {
@@ -115,9 +159,9 @@ public class JobService extends android.app.job.JobService {
         protected String doInBackground(Object... objects) {
             onHTTPConnection urlconn = new onHTTPConnection();
             APIExplorer apiExplorer = new APIExplorer();
-            String GET_result = urlconn.connectAndGet(sx, sy);
-            String GET_result2 = urlconn.outGet(sx, sy);
-            String GET_result3 = apiExplorer.Getbus();
+            String GET_result = urlconn.connectAndGet(sx, sy,nowDay);
+            String GET_result2 = urlconn.outGet(sx, sy,nowDay);
+            String GET_result3 = apiExplorer.Getbus(nowDay);
             return GET_result3;
         }
 
@@ -134,32 +178,8 @@ public class JobService extends android.app.job.JobService {
         }
     }
     public class APIExplorer {
-        public String Getbus() {
+        public String Getbus(String nowDay) {
             Log.i("Getbusstart","Getbus 시작");
-            String nowDay = "";
-            switch (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-                case 1:
-                    nowDay = "일";
-                    break;
-                case 2:
-                    nowDay = "월";
-                    break;
-                case 3:
-                    nowDay = "화";
-                    break;
-                case 4:
-                    nowDay = "수";
-                    break;
-                case 5:
-                    nowDay = "목";
-                    break;
-                case 6:
-                    nowDay = "금";
-                    break;
-                case 7:
-                    nowDay = "토";
-                    break;
-            }
             FinallincityDatabase finallincityDatabase = Room.databaseBuilder(getApplicationContext(), FinallincityDatabase.class, "finallincity.db")
                     .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
@@ -226,6 +246,10 @@ public class JobService extends android.app.job.JobService {
                                             job.put("id", e);
                                             job.put("name", jsonObject.getInt("name"));
                                             ab.put(job);
+                                        } else {
+                                            job.put("id",e);
+                                            job.put("result","no");
+                                            ab.put(job);
                                         }
                                     }
 
@@ -245,7 +269,7 @@ public class JobService extends android.app.job.JobService {
                                 result = sb.toString();
                                 JSONObject jio = new JSONObject(result);
                                 if (jio.has("error")) {
-
+                                    finalloutcityDao.updateset("실시간정보 제공준비중",e);
                                 } else {
                                     JSONObject jsonObject1 = (JSONObject) jio.get("result");
                                     JSONArray array1 = (JSONArray) jsonObject1.get("real");
@@ -253,15 +277,21 @@ public class JobService extends android.app.job.JobService {
                                     JSONObject object2;
                                     if (object1.has("arrival1")) {
                                         object2 = (JSONObject) object1.get("arrival1");
-                                    } else {
+                                        int r = object2.getInt("arrivalSec");
+                                        int minute = (int) Math.floor((double) r / 60);
+                                        int sec = r % 60;
+                                        String arrtime = minute + "분 " + sec + "초";
+                                        finalloutcityDao.updateset(arrtime, e);
+                                    } else if(object1.has("arrival2")){
                                         object2 = (JSONObject) object1.get("arrival2");
+                                        int r = object2.getInt("arrivalSec");
+                                        int minute = (int) Math.floor((double) r / 60);
+                                        int sec = r % 60;
+                                        String arrtime = minute + "분 " + sec + "초";
+                                        finalloutcityDao.updateset(arrtime, e);
+                                    } else {
+                                        finalloutcityDao.updateset("운행종료",e);
                                     }
-
-                                    int r = object2.getInt("arrivalSec");
-                                    int minute = (int) Math.floor((double) r / 60);
-                                    int sec = r % 60;
-                                    String arrtime = minute + "분 " + sec + "초";
-                                    finalloutcityDao.updateset(arrtime, e);
                                 }
                             }
                         }
@@ -325,6 +355,10 @@ public class JobService extends android.app.job.JobService {
                                             job.put("id", e);
                                             job.put("name", jsonObj.getInt("name"));
                                             ac.put(job);
+                                        } else {
+                                            job.put("id",e);
+                                            job.put("result","no");
+                                            ac.put(job);
                                         }
                                     }
                                 }
@@ -343,7 +377,7 @@ public class JobService extends android.app.job.JobService {
                                 result = sb.toString();
                                 JSONObject jio = new JSONObject(result);
                                 if (jio.has("error")) {
-
+                                    finalloutcityDao.updateset("실시간정보 제공준비중",e);
                                 } else {
                                     JSONObject object = (JSONObject) jio.get("result");
                                     JSONArray array1 = (JSONArray) object.get("real");
@@ -364,6 +398,7 @@ public class JobService extends android.app.job.JobService {
                                         String arrtime = minute + "분 " + sec + "초";
                                         finallincityDao.updateset(arrtime, e);
                                     } else {
+                                        finallincityDao.updateset("운행종료",e);
                                     }
                                 }
                             }
@@ -393,48 +428,55 @@ public class JobService extends android.app.job.JobService {
             }
             try {
                 for (int i = 0; i < a.length(); i++) {
+
                     Thread.sleep(200);
                     JSONObject jsonObject = (JSONObject) a.get(i);
-                    StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList"); /*URL*/
-                    urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=r9UuVdEP%2F9NIeef7vzX%2BbgRBAuOq5GSBJeSp2kV9FMiR3bbRRNeuUDfoxTFzvC0DS7CrYt8osMbMH9HwnZoVHg%3D%3D"); /*Service Key*/
-                    urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
-                    urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("50", "UTF-8")); /*한 페이지 결과 수*/
-                    urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*데이터 타입(xml, json)*/
-                    urlBuilder.append("&" + URLEncoder.encode("cityCode", "UTF-8") + "=" + jsonObject.get("citycode")); /*WGS84 위도 좌표*/
-                    urlBuilder.append("&" + URLEncoder.encode("nodeId", "UTF-8") + "=" + jsonObject.get("nodeid")); /*WGS84 경도 좌표*/
-                    URL url = new URL(urlBuilder.toString());
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.setRequestProperty("Content-type", "application/json");
-                    System.out.println("Response code: " + conn.getResponseCode());
-                    BufferedReader rd;
-                    if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-                        rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    } else {
-                        rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-                    }
-                    StringBuilder sb = new StringBuilder();
-                    String line;
-                    while ((line = rd.readLine()) != null) {
-                        sb.append(line);
-                    }
-                    rd.close();
+                    if (jsonObject.has("result")){
+                        finallincityDao.updateset("실시간정보 제공준비중",jsonObject.getInt("id"));
+                    } else{
+                        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList"); /*URL*/
+                        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=r9UuVdEP%2F9NIeef7vzX%2BbgRBAuOq5GSBJeSp2kV9FMiR3bbRRNeuUDfoxTFzvC0DS7CrYt8osMbMH9HwnZoVHg%3D%3D"); /*Service Key*/
+                        urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+                        urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("50", "UTF-8")); /*한 페이지 결과 수*/
+                        urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*데이터 타입(xml, json)*/
+                        urlBuilder.append("&" + URLEncoder.encode("cityCode", "UTF-8") + "=" + jsonObject.get("citycode")); /*WGS84 위도 좌표*/
+                        urlBuilder.append("&" + URLEncoder.encode("nodeId", "UTF-8") + "=" + jsonObject.get("nodeid")); /*WGS84 경도 좌표*/
+                        URL url = new URL(urlBuilder.toString());
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("GET");
+                        conn.setRequestProperty("Content-type", "application/json");
+                        System.out.println("Response code: " + conn.getResponseCode());
+                        BufferedReader rd;
+                        if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        } else {
+                            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                        }
+                        StringBuilder sb = new StringBuilder();
+                        String line;
+                        while ((line = rd.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        rd.close();
 
-                    String results = sb.toString();
-                    JSONObject job2 = new JSONObject(results);
-                    JSONObject job3 = (JSONObject) job2.get("response");
-                    JSONObject job4 = (JSONObject) job3.get("body");
-                    JSONObject job5 = (JSONObject) job4.get("items");
-                    JSONArray jarr = (JSONArray) job5.get("item");
-                    for (int q = 0; q < jarr.length(); q++) {
-                        JSONObject jsonObject1 = (JSONObject) jarr.get(q);
-                        if (jsonObject1.get("routeno").equals(jsonObject.get("name"))) {
-                            String arrtime = "";
-                            int r = jsonObject1.getInt("arrtime");
-                            int minute = (int) Math.floor((double) r / 60);
-                            int sec = r % 60;
-                            arrtime = minute + "분 " + sec + "초";
-                            finalloutcityDao.updateset(arrtime, jsonObject.getInt("id"));
+                        String results = sb.toString();
+                        JSONObject job2 = new JSONObject(results);
+                        JSONObject job3 = (JSONObject) job2.get("response");
+                        JSONObject job4 = (JSONObject) job3.get("body");
+                        JSONObject job5 = (JSONObject) job4.get("items");
+                        JSONArray jarr = (JSONArray) job5.get("item");
+                        for (int q = 0; q < jarr.length(); q++) {
+                            JSONObject jsonObject1 = (JSONObject) jarr.get(q);
+                            if (jsonObject1.get("routeno").equals(jsonObject.get("name"))) {
+                                String arrtime = "";
+                                int r = jsonObject1.getInt("arrtime");
+                                int minute = (int) Math.floor((double) r / 60);
+                                int sec = r % 60;
+                                arrtime = minute + "분 " + sec + "초";
+                                finalloutcityDao.updateset(arrtime, jsonObject.getInt("id"));
+                            } else{
+                                finalloutcityDao.updateset("운행종료", jsonObject.getInt("id"));
+                            }
                         }
                     }
                 }
@@ -460,48 +502,53 @@ public class JobService extends android.app.job.JobService {
                 for (int i = 0; i < a.length(); i++) {
                     Thread.sleep(200);
                     JSONObject jsonObject = (JSONObject) a.get(i);
-                    StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList"); /*URL*/
-                    urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=r9UuVdEP%2F9NIeef7vzX%2BbgRBAuOq5GSBJeSp2kV9FMiR3bbRRNeuUDfoxTFzvC0DS7CrYt8osMbMH9HwnZoVHg%3D%3D"); /*Service Key*/
-                    urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
-                    urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("50", "UTF-8")); /*한 페이지 결과 수*/
-                    urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*데이터 타입(xml, json)*/
-                    urlBuilder.append("&" + URLEncoder.encode("cityCode", "UTF-8") + "=" + jsonObject.get("citycode")); /*WGS84 위도 좌표*/
-                    urlBuilder.append("&" + URLEncoder.encode("nodeId", "UTF-8") + "=" + jsonObject.get("nodeid")); /*WGS84 경도 좌표*/
-                    URL url = new URL(urlBuilder.toString());
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.setRequestProperty("Content-type", "application/json");
-                    System.out.println("Response code: " + conn.getResponseCode());
-                    BufferedReader rd;
-                    if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-                        rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    if(jsonObject.has("result")){
+                        finallincityDao.updateset("실시간정보 제공준비중", jsonObject.getInt("id"));
                     } else {
-                        rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-                    }
-                    StringBuilder sb = new StringBuilder();
-                    String line;
-                    while ((line = rd.readLine()) != null) {
-                        sb.append(line);
-                    }
-                    rd.close();
-                    String results = sb.toString();
-                    JSONObject job2 = new JSONObject(results);
-                    JSONObject job3 = (JSONObject) job2.get("response");
-                    JSONObject job4 = (JSONObject) job3.get("body");
-                    JSONObject job5 = (JSONObject) job4.get("items");
-                    JSONArray jarr = (JSONArray) job5.get("item");
-                    for (int q = 0; q < jarr.length(); q++) {
-                        JSONObject jsonObject1 = (JSONObject) jarr.get(q);
-                        if (jsonObject1.get("routeno").equals(jsonObject.get("name"))) {
-                            String arrtime = "";
-                            int r = jsonObject1.getInt("arrtime");
-                            int minute = (int) Math.floor((double) r / 60);
-                            int sec = r % 60;
-                            arrtime = minute + "분 " + sec + "초";
-                            finallincityDao.updateset(arrtime, jsonObject.getInt("id"));
+                        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList"); /*URL*/
+                        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=r9UuVdEP%2F9NIeef7vzX%2BbgRBAuOq5GSBJeSp2kV9FMiR3bbRRNeuUDfoxTFzvC0DS7CrYt8osMbMH9HwnZoVHg%3D%3D"); /*Service Key*/
+                        urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+                        urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("50", "UTF-8")); /*한 페이지 결과 수*/
+                        urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*데이터 타입(xml, json)*/
+                        urlBuilder.append("&" + URLEncoder.encode("cityCode", "UTF-8") + "=" + jsonObject.get("citycode")); /*WGS84 위도 좌표*/
+                        urlBuilder.append("&" + URLEncoder.encode("nodeId", "UTF-8") + "=" + jsonObject.get("nodeid")); /*WGS84 경도 좌표*/
+                        URL url = new URL(urlBuilder.toString());
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("GET");
+                        conn.setRequestProperty("Content-type", "application/json");
+                        System.out.println("Response code: " + conn.getResponseCode());
+                        BufferedReader rd;
+                        if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        } else {
+                            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                        }
+                        StringBuilder sb = new StringBuilder();
+                        String line;
+                        while ((line = rd.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        rd.close();
+                        String results = sb.toString();
+                        JSONObject job2 = new JSONObject(results);
+                        JSONObject job3 = (JSONObject) job2.get("response");
+                        JSONObject job4 = (JSONObject) job3.get("body");
+                        JSONObject job5 = (JSONObject) job4.get("items");
+                        JSONArray jarr = (JSONArray) job5.get("item");
+                        for (int q = 0; q < jarr.length(); q++) {
+                            JSONObject jsonObject1 = (JSONObject) jarr.get(q);
+                            if (jsonObject1.get("routeno").equals(jsonObject.get("name"))) {
+                                String arrtime = "";
+                                int r = jsonObject1.getInt("arrtime");
+                                int minute = (int) Math.floor((double) r / 60);
+                                int sec = r % 60;
+                                arrtime = minute + "분 " + sec + "초";
+                                finallincityDao.updateset(arrtime, jsonObject.getInt("id"));
+                            } else {
+                                finallincityDao.updateset("운행종료", jsonObject.getInt("id"));
+                            }
                         }
                     }
-
                 }
             } catch (Exception e) {
                 e.toString();
@@ -512,33 +559,9 @@ public class JobService extends android.app.job.JobService {
     }
 
     public class onHTTPConnection {
-        public String connectAndGet(Double sx, Double sy) {
+        public String connectAndGet(Double sx, Double sy, String nowDay) {
             Log.i("conncetAndGet","connectAndGet 시작");
             String station = "";
-            String nowDay = "";
-            switch (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-                case 1:
-                    nowDay = "일";
-                    break;
-                case 2:
-                    nowDay = "월";
-                    break;
-                case 3:
-                    nowDay = "화";
-                    break;
-                case 4:
-                    nowDay = "수";
-                    break;
-                case 5:
-                    nowDay = "목";
-                    break;
-                case 6:
-                    nowDay = "금";
-                    break;
-                case 7:
-                    nowDay = "토";
-                    break;
-            }
             double ex = 0;
             double ey = 0;
             int dist = 0;
@@ -750,7 +773,7 @@ public class JobService extends android.app.job.JobService {
                     }
                     results = incity.toString();
                     Log.i("incityend",results);
-                    InTime();
+                    InTime(nowDay);
                     return results;
                 } catch (JSONException e) {
                     e.toString();
@@ -780,7 +803,7 @@ public class JobService extends android.app.job.JobService {
             }
             try {
                 SuttleDatabase suttleDatabase = Room.databaseBuilder(getApplicationContext(), SuttleDatabase.class, "suttle.db")
-                        .allowMainThreadQueries()
+                        .fallbackToDestructiveMigration()
                         .allowMainThreadQueries()
                         .build();
                 suttleDao = suttleDatabase.suttleDao();
@@ -912,36 +935,12 @@ public class JobService extends android.app.job.JobService {
             return null;
         }
 
-        public String InTime() {
+        public String InTime(String nowDay) {
             Log.i("InTimestart","InTime 시작");
             FincityDatabase indatabase = Room.databaseBuilder(getApplicationContext(), FincityDatabase.class, "fincity.db")
                     .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
                     .build();
-            String nowDay = "";
-            switch (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-                case 1:
-                    nowDay = "일";
-                    break;
-                case 2:
-                    nowDay = "월";
-                    break;
-                case 3:
-                    nowDay = "화";
-                    break;
-                case 4:
-                    nowDay = "수";
-                    break;
-                case 5:
-                    nowDay = "목";
-                    break;
-                case 6:
-                    nowDay = "금";
-                    break;
-                case 7:
-                    nowDay = "토";
-                    break;
-            }
             DayTimeDatabase database = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")
                     .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
@@ -1349,7 +1348,7 @@ public class JobService extends android.app.job.JobService {
             return "";
         }
 
-        public String outGet(Double sx, Double sy) {
+        public String outGet(Double sx, Double sy, String nowDay) {
             Log.i("outGetstart","outGet 시작");
             try {
                 String result;
@@ -1436,7 +1435,7 @@ public class JobService extends android.app.job.JobService {
                         }
                     }
                     Log.i("outGetend","outGet 종료");
-                    String out = firstGet(outcity, sx, sy);
+                    String out = firstGet(outcity, sx, sy, nowDay);
 
                     return out;
                 } catch (Exception e) {
@@ -1448,7 +1447,7 @@ public class JobService extends android.app.job.JobService {
             }
         }
 
-        public String firstGet(JSONArray t, Double sx, Double sy) throws JSONException, InterruptedException {
+        public String firstGet(JSONArray t, Double sx, Double sy, String nowDay) throws JSONException, InterruptedException {
             Log.i("firstGetstart","firstGet 시작");
             JSONArray jsonArray = (JSONArray) t;
             String jsona = t.toString();
@@ -1598,14 +1597,14 @@ public class JobService extends android.app.job.JobService {
                     }
                 }
                 Log.i("firstGetend","firstGet 종료");
-                String out = ThirdandGet(outcity);
+                String out = ThirdandGet(outcity, nowDay);
                 return out;
             }
 
             return "noway";
         }
 
-        public String ThirdandGet(JSONArray t) throws JSONException, InterruptedException {
+        public String ThirdandGet(JSONArray t, String nowDay) throws JSONException, InterruptedException {
             Log.i("ThirdandGetstart","ThirdandGet 시작");
             JSONArray jsonArray = (JSONArray) t;
             JSONArray outcity = new JSONArray();
@@ -1769,36 +1768,12 @@ public class JobService extends android.app.job.JobService {
                 }
             }
             Log.i("ThirdandGetend","ThirdandGet 종료");
-            String q = Outtime();
+            String q = Outtime(nowDay);
             return q;
         }
 
-        public String Outtime() {
+        public String Outtime(String nowDay) {
             Log.i("Outtimestart","Outtime 시작");
-            String nowDay = "";
-            switch (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-                case 1:
-                    nowDay = "일";
-                    break;
-                case 2:
-                    nowDay = "월";
-                    break;
-                case 3:
-                    nowDay = "화";
-                    break;
-                case 4:
-                    nowDay = "수";
-                    break;
-                case 5:
-                    nowDay = "목";
-                    break;
-                case 6:
-                    nowDay = "금";
-                    break;
-                case 7:
-                    nowDay = "토";
-                    break;
-            }
             DayTimeDatabase database = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")
                     .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
@@ -1811,7 +1786,8 @@ public class JobService extends android.app.job.JobService {
             }
             FinalloutcityDatabase finalloutcityDatabase = Room.databaseBuilder(getApplicationContext(), FinalloutcityDatabase.class, "finalloutcity.db")
                     .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries().build();
+                    .allowMainThreadQueries()
+                    .build();
             finalloutcityDao = finalloutcityDatabase.finalloutcityDao();
             List<Finalloutcity> finalloutcities = finalloutcityDao.getFday(nowDay);
             if (finalloutcities.size() > 0) {
