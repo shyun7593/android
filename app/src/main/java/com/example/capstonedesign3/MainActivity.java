@@ -72,6 +72,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DayTimeDatabase database = Room.databaseBuilder(getApplicationContext(),DayTimeDatabase.class,"daytime.db")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build();
+        dayTimeDao = database.dayTimeDao();
+
         initJobScheduler();
 
 //        FinallincityDatabase finallincityDatabase = Room.databaseBuilder(getApplicationContext(), FinallincityDatabase.class, "finallincity.db")
@@ -145,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 //                arrow5.setText("ↆ");
 //                detail6.setText(jsonObject2.get("end").toString());
 //            } catch (Exception e) {
-//                e.printStackTrace();
+//                e.tostring();
 //            }
 //        } else {
 //            try {
@@ -181,13 +187,12 @@ public class MainActivity extends AppCompatActivity {
 //                    detail4.setText(jsonArray.getJSONObject(3).getString("end"));
 //                }
 //            } catch (Exception e) {
-//                e.printStackTrace();
+//                e.tostring();
 //            }
 //        }
     }
 
     private void initJobScheduler() {
-        Log.i("JobScheduler", "start");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ComponentName componentName = new ComponentName(this, JobService.class);
 //            PersistableBundle bundle = new PersistableBundle();
