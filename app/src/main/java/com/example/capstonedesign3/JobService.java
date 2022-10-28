@@ -1,14 +1,8 @@
 package com.example.capstonedesign3;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.job.JobParameters;
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -24,9 +18,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.text.DecimalFormat;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;

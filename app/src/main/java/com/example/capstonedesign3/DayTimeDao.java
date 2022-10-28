@@ -23,6 +23,31 @@ public interface DayTimeDao {
     @Query("SELECT * FROM DayTime")
     List<DayTime> getDayTimeAll();
 
+    @Query("UPDATE DayTime SET time =:time WHERE day ='월'")
+    void upmon(int time);
+
+    @Query("UPDATE DayTime SET time =:time WHERE day ='화'")
+    void uptu(int time);
+
+    @Query("UPDATE DayTime SET time =:time WHERE day ='수'")
+    void upwe(int time);
+
+    @Query("UPDATE DayTime SET time =:time WHERE day ='목'")
+    void upth(int time);
+
+    @Query("UPDATE DayTime SET time =:time WHERE day ='금'")
+    void upfr(int time);
+
+    @Query("UPDATE DayTime SET time =:time WHERE day ='토'")
+    void upse(int time);
+
+
+    @Query("SELECT day FROM DayTime WHERE day =:day")
+    String getmoo(String day);
+
+    @Query("SELECT time FROM DayTime WHERE day=:day")
+    int gettime(String day);
+
     @Query("UPDATE DayTime SET time =:time WHERE day=:day")
     void updateday(int time, String day);
 
