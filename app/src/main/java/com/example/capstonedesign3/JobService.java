@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.room.Room;
 
@@ -64,6 +65,7 @@ public class JobService extends android.app.job.JobService {
     @Override
     // 여기에 잡스케줄러가 할 일을 쓰시면 됩니다.
     public boolean onStartJob(JobParameters params) {
+        Toast.makeText(getApplicationContext(), "경로를 검색 중입니다.", Toast.LENGTH_LONG).show();
         this.parameters = params;
         String nowDay = "";
         switch (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
@@ -118,7 +120,6 @@ public class JobService extends android.app.job.JobService {
         outdatabase.close();
         httpFunc = new HttpFunc(sx, sy, nowDay);
         httpFunc.execute(params);
-        Log.i("hello","hello");
         jobFinished(params,false);
         return false;
     }
@@ -160,6 +161,7 @@ public class JobService extends android.app.job.JobService {
         }
 
         protected void onPostExecute(String a) {
+            Toast.makeText(getApplicationContext(), "성공적으로 경로를 얻어왔습니다.", Toast.LENGTH_LONG).show();
             Log.i("Jobservice", "Finish");
             jobFinished(parameters, true);
         }
@@ -419,11 +421,10 @@ public class JobService extends android.app.job.JobService {
             }
             try {
                 for (int i = 0; i < a.length(); i++) {
-
                     Thread.sleep(200);
                     JSONObject jsonObject = (JSONObject) a.get(i);
                     if (jsonObject.has("result")){
-                        finallincityDao.updateset("실시간정보 제공준비중",jsonObject.getInt("id"));
+                        finalloutcityDao.updateset("실시간정보 제공준비중",jsonObject.getInt("id"));
                     } else{
                         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList"); /*URL*/
                         urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=r9UuVdEP%2F9NIeef7vzX%2BbgRBAuOq5GSBJeSp2kV9FMiR3bbRRNeuUDfoxTFzvC0DS7CrYt8osMbMH9HwnZoVHg%3D%3D"); /*Service Key*/

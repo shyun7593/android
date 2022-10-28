@@ -1,10 +1,13 @@
 package com.example.capstonedesign3;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +26,14 @@ public class Extra extends AppCompatActivity {
     private FinalloutcityDao finalloutcityDao;
     private SelectedRouteDao selectedRouteDao;
     private SelectedRoute route = new SelectedRoute();
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        Intent intent = new Intent(Extra.this,Routescreen.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,35 +80,34 @@ public class Extra extends AppCompatActivity {
         if (finallincities.size() == 0 && finalloutcities.size() == 0) {
             TextView textViewNm = new TextView(getApplicationContext());
             textViewNm.setText("오늘 일정은 없습니다.");
-            textViewNm.setTextSize(20);
+            textViewNm.setTextSize(15);
             textViewNm.setTypeface(null, Typeface.BOLD);
             textViewNm.setId(0);
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
-            param.leftMargin = 30;
+            param.topMargin=20;
+            param.leftMargin = 10;
             textViewNm.setLayoutParams(param);
             listView.addView(textViewNm);
         } else if (finallincities.size() > 0 && finalloutcities.size() > 0) {
             for (int i = 0; i < finallincities.size(); i++) {
                 TextView textViewin = new TextView(getApplicationContext());
-                TextView textViewin1 = new TextView(getApplicationContext());
                 DecimalFormat df = new DecimalFormat("###,###");
                 String money = df.format(finallincities.get(i).getFare());
-                textViewin.setText(" 출발시간 : " + finallincities.get(i).getSchedule() + " 소요시간 : " + finallincities.get(i).getTotalTime() + "분");
-                textViewin1.setText(" 출발정류소 : " + finallincities.get(i).getStart() + " (" + finallincities.get(i).getName() + "버스)    " + money + "원");
-                textViewin.setTextSize(20);
-                textViewin1.setTextSize(10);
+                textViewin.setText(" 출발시간 : " + finallincities.get(i).getSchedule() + "\n 소요시간 : " + finallincities.get(i).getTotalTime() + "분\n"
+                + " 출발정류소 : " + finallincities.get(i).getStart() + " (" + finallincities.get(i).getName() + "버스)\n" + money + "원");
+                textViewin.setTextSize(15);
+                Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.note_bg);
                 textViewin.setTypeface(null, Typeface.BOLD);
-                textViewin1.setTypeface(null, Typeface.BOLD);
+                textViewin.setPadding(0,0,0,15);
+                textViewin.setBackground(drawable);
                 textViewin.setId(i);
-                textViewin1.setId(i);
                 LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-                param.leftMargin = 30;
+                param.topMargin=20;
+                param.leftMargin = 10;
                 textViewin.setLayoutParams(param);
-                textViewin1.setLayoutParams(param);
                 listView.addView(textViewin);
-                listView.addView(textViewin1);
                 int finalI = i;
                 textViewin.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -109,24 +119,22 @@ public class Extra extends AppCompatActivity {
             }
             for (int j = 0; j < finalloutcities.size(); j++) {
                 TextView textViewout = new TextView(getApplicationContext());
-                TextView textViewout1 = new TextView(getApplicationContext());
                 DecimalFormat df = new DecimalFormat("###,###");
                 String money = df.format(finallincities.get(j).getFare());
-                textViewout.setText(" 출발시간 : " +finalloutcities.get(j).getSchedule() + " 소요시간 : " + finalloutcities.get(j).getTotalTime() + "분");
-                textViewout1.setText(" 출발정류소 : " + finalloutcities.get(j).getStart() + " (" + finalloutcities.get(j).getStart() + "버스)    " + money + "원");
-                textViewout.setTextSize(20);
-                textViewout1.setTextSize(10);
+                textViewout.setText(" 출발시간 : " +finalloutcities.get(j).getSchedule() + "\n 소요시간 : " + finalloutcities.get(j).getTotalTime() + "분\n"
+                +" 출발정류소 : " + finalloutcities.get(j).getStart() + " (" + finalloutcities.get(j).getStart() + "버스)\n" + money + "원");
+                textViewout.setTextSize(15);
+                Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.note_bg);
                 textViewout.setTypeface(null, Typeface.BOLD);
-                textViewout1.setTypeface(null, Typeface.BOLD);
+                textViewout.setBackground(drawable);
+                textViewout.setPadding(0,0,0,15);
                 textViewout.setId(j);
-                textViewout1.setId(j);
                 LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-                param.leftMargin = 30;
+                param.topMargin=20;
+                param.leftMargin = 10;
                 textViewout.setLayoutParams(param);
-                textViewout1.setLayoutParams(param);
                 listView.addView(textViewout);
-                listView.addView(textViewout1);
                 int finalI = j;
                 textViewout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -140,24 +148,22 @@ public class Extra extends AppCompatActivity {
             if(finallincities.size()>0){
                 for (int i = 0; i < finallincities.size(); i++) {
                     TextView textViewin = new TextView(getApplicationContext());
-                    TextView textViewin1 = new TextView(getApplicationContext());
                     DecimalFormat df = new DecimalFormat("###,###");
                     String money = df.format(finallincities.get(i).getFare());
-                    textViewin.setText(" 출발시간 : " + finallincities.get(i).getSchedule() + " 소요시간 : " + finallincities.get(i).getTotalTime() + "분");
-                    textViewin1.setText(" 출발정류소 : " + finallincities.get(i).getStart() + " (" + finallincities.get(i).getName() + "버스)    " + money + "원");
-                    textViewin.setTextSize(20);
-                    textViewin1.setTextSize(10);
+                    textViewin.setText(" 출발시간 : " + finallincities.get(i).getSchedule() + "\n 소요시간 : " + finallincities.get(i).getTotalTime() + "분"
+                    +" 출발정류소 : " + finallincities.get(i).getStart() + " (" + finallincities.get(i).getName() + "버스)\n" + money + "원");
+                    textViewin.setTextSize(15);
                     textViewin.setTypeface(null, Typeface.BOLD);
-                    textViewin1.setTypeface(null, Typeface.BOLD);
+                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.edge);
+                    textViewin.setBackground(drawable);
+                    textViewin.setPadding(0,0,0,15);
                     textViewin.setId(i);
-                    textViewin1.setId(i);
                     LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT);
-                    param.leftMargin = 30;
+                    param.topMargin=20;
+                    param.leftMargin = 10;
                     textViewin.setLayoutParams(param);
-                    textViewin1.setLayoutParams(param);
                     listView.addView(textViewin);
-                    listView.addView(textViewin1);
                     int finalI = i;
                     textViewin.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -171,24 +177,22 @@ public class Extra extends AppCompatActivity {
             if(finalloutcities.size()>0){
                 for (int j = 0; j < finalloutcities.size(); j++) {
                     TextView textViewout = new TextView(getApplicationContext());
-                    TextView textViewout1 = new TextView(getApplicationContext());
                     DecimalFormat df = new DecimalFormat("###,###");
                     String money = df.format(finallincities.get(j).getFare());
-                    textViewout.setText(" 출발시간 : " +finalloutcities.get(j).getSchedule() + " 소요시간 : " + finalloutcities.get(j).getTotalTime() + "분");
-                    textViewout1.setText(" 출발정류소 : " + finalloutcities.get(j).getStart() + " (" + finalloutcities.get(j).getStart() + "버스)    " + money + "원");
-                    textViewout.setTextSize(20);
-                    textViewout1.setTextSize(10);
+                    textViewout.setText(" 출발시간 : " +finalloutcities.get(j).getSchedule() + "\n 소요시간 : " + finalloutcities.get(j).getTotalTime() + "분\n"
+                    +" 출발정류소 : " + finalloutcities.get(j).getStart() + " (" + finalloutcities.get(j).getStart() + "버스)\n" + money + "원");
+                    textViewout.setTextSize(15);
+                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge);
+                    textViewout.setBackground(drawable);
+                    textViewout.setPadding(0,0,0,15);
                     textViewout.setTypeface(null, Typeface.BOLD);
-                    textViewout1.setTypeface(null, Typeface.BOLD);
                     textViewout.setId(j);
-                    textViewout1.setId(j);
                     LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT);
-                    param.leftMargin = 30;
+                    param.topMargin=20;
+                    param.leftMargin = 10;
                     textViewout.setLayoutParams(param);
-                    textViewout1.setLayoutParams(param);
                     listView.addView(textViewout);
-                    listView.addView(textViewout1);
                     int finalI = j;
                     textViewout.setOnClickListener(new View.OnClickListener() {
                         @Override

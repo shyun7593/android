@@ -7,6 +7,7 @@
     tools:context=".Routescreen">
 
     <TableLayout
+        android:shrinkColumns="0"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -28,11 +29,12 @@
 
             <TextView
                 android:layout_height="match_parent"
-                android:text="Today" />
+                android:text="Today"
+                android:textSize="40dp" />
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:layout_gravity="left"
                 android:gravity="left"
@@ -41,7 +43,7 @@
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:layout_gravity="left"
                 android:layout_marginLeft="5dp"
@@ -50,21 +52,36 @@
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:layout_gravity="left"
                 android:layout_marginLeft="5dp"
                 android:gravity="left"
-                android:textSize="20dp" />
-
+                android:textSize="20dp"
+                android:ellipsize="end"
+                android:maxLines="@integer/material_motion_duration_long_2"
+                />
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="right"
+                android:layout_marginLeft="200dp"
+                android:gravity="left"
+                android:textSize="20dp"
+                android:ellipsize="end"
+                android:maxLines="@integer/material_motion_duration_long_2"
+                />
             <Button
                 android:id="@+id/bu"
                 android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginLeft="200dp"
-                android:background="#00ff0000"
-                android:gravity="right"
-                android:text="🔻"
+                android:layout_height="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="#cccccc"
+                android:gravity="center"
+                android:text="상세경로 열기"
                 android:textColor="@color/black"
                 android:textColorLink="@color/black" />
 
