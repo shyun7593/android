@@ -23,6 +23,8 @@ public interface FinalloutcityDao {
     @Query("SELECT * FROM Finalloutcity")
     List<Finalloutcity> getFinalloutcityAll();
 
+
+
     @Query("UPDATE Finalloutcity SET Arrtime = :arrtime WHERE Id = :id")
     void updateset(String arrtime, int id);
 

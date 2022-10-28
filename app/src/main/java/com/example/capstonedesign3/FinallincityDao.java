@@ -21,6 +21,9 @@ public interface FinallincityDao {
     @Delete
     void delete(Finallincity finallincity);
 
+    @Query("SELECT schedule From Finallincity WHERE Day =:day")
+    String getsc(String day);
+
     @Query("UPDATE Finallincity SET Arrtime = :arrtime WHERE Id = :id")
     void updateset(String arrtime, int id);
 

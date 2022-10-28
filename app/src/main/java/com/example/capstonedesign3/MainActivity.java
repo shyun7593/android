@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private final int PERMISSION_REQUEST_RESULT = 100;
     private Button timescreen_move;
     private Button routescreen_move;
+    private FinallincityDao finallincityDao;
+    private FinalloutcityDao finalloutcityDao;
     Thread thread;
     boolean isThread = false;
     TextView tv_location;
@@ -237,6 +239,42 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
     public void createNotification(View view) {
+        FinallincityDatabase finallincityDatabase = Room.databaseBuilder(getApplicationContext(), FinallincityDatabase.class, "finallincity.db")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build();
+        finallincityDao = finallincityDatabase.finallincityDao();
+        FinalloutcityDatabase database1 = Room.databaseBuilder(getApplicationContext(), FinalloutcityDatabase.class, "finalloutcity.db")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build();
+        finalloutcityDao = database1.finalloutcityDao();
+
+        String nowDay = "";
+        switch (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+            case 1:
+                nowDay = "일";
+                break;
+            case 2:
+                nowDay = "월";
+                break;
+            case 3:
+                nowDay = "화";
+                break;
+            case 4:
+                nowDay = "수";
+                break;
+            case 5:
+                nowDay = "목";
+                break;
+            case 6:
+                nowDay = "금";
+                break;
+            case 7:
+                nowDay = "토";
+                break;
+        }
+        String altime = finallincityDao.getsc(nowDay);
 
         NotificationManager notificationManager=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -269,10 +307,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         //상태바를 드래그하여 아래로 내리면 보이는
         //알림창(확장 상태바)의 설정
-        builder.setContentTitle("Title");//알림창 제목
-        builder.setContentText("Messages....");//알림창 내용
-        builder.setStyle(new NotificationCompat.BigTextStyle()
-                .bigText(""));
+        builder.setContentTitle("출발시간 알림이");//알림창 제목
+        builder.setContentText("출발해야될 시간은 " + altime + " 입니다.");//알림창 내용
         //알림창의 큰 이미지
         Bitmap bm= BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher);
         builder.setLargeIcon(bm);//매개변수가 Bitmap을 줘야한다.
@@ -346,6 +382,25 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 // 첫번째칸  간격 설정(최소시간 15분)
                 // 두번째칸 이 작업에 대한 밀리초 플렉스. Flex는 기간의 최소 또는 5% 중 더 높은 값으로 고정됩니다
                 builder.setPeriodic(15 * 60 * 1000, 20 * 60 * 1000);
+            } else {
+                builder.setPeriodic(15 * 60 * 1000);
+            }
+            JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+            scheduler.schedule(builder.build());
+        }
+    }
+    private void alinitJobScheduler() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ComponentName componentName = new ComponentName(this, TimeService.class);
+//            PersistableBundle bundle = new PersistableBundle();
+//            bundle.putInt("number", 10);
+            JobInfo.Builder builder = new JobInfo.Builder(JOB_KEY, componentName);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                // 버전마다 기간등록하는방법이 다르다해서 이렇게 작성했습니다.
+                // 정확한건 더 찾아봐야 합니다.
+                // 첫번째칸  간격 설정(최소시간 15분)
+                // 두번째칸 이 작업에 대한 밀리초 플렉스. Flex는 기간의 최소 또는 5% 중 더 높은 값으로 고정됩니다
+                builder.setPeriodic(360 * 60 * 1000, 20 * 60 * 1000);
             } else {
                 builder.setPeriodic(15 * 60 * 1000);
             }
