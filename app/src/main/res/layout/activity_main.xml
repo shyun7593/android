@@ -112,14 +112,21 @@
                 android:layout_gravity="center"/>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/bt_my_location1"
+                android:onClick="createNotification"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:drawableTop="@drawable/ic_baseline_my_location_23"
                 android:background="@drawable/rounded_button"
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"/>
-
+            <androidx.appcompat.widget.AppCompatButton
+                android:onClick="removeNotification"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:drawableTop="@drawable/ic_baseline_my_location_23"
+                android:background="@drawable/rounded_button"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"/>
             <TextView
                 android:id="@+id/tv_location"
                 android:layout_width="wrap_content"

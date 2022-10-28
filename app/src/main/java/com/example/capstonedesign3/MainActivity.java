@@ -3,15 +3,24 @@ package com.example.capstonedesign3;
 
 import android.Manifest;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +37,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
@@ -69,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // JobScheduler 등록
-        initJobScheduler();
+//        initJobScheduler();
         tv_location = (TextView) findViewById(R.id.tv_location);
         bt_my_location = (Button) findViewById(R.id.bt_my_location);
         bt_my_location.setOnClickListener(onClickListener);
@@ -225,6 +236,102 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
 
+    public void createNotification(View view) {
+
+        NotificationManager notificationManager=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        //Notification 객체를 생성해주는 건축가객체 생성(AlertDialog 와 비슷)
+        NotificationCompat.Builder builder= null;
+
+        //Oreo 버전(API26 버전)이상에서는 알림시에 NotificationChannel 이라는 개념이 필수 구성요소가 됨.
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+
+            String channelID="channel_01"; //알림채널 식별자
+            String channelName="MyChannel01"; //알림채널의 이름(별명)
+
+            //알림채널 객체 만들기
+            NotificationChannel channel= new NotificationChannel(channelID,channelName,NotificationManager.IMPORTANCE_DEFAULT);
+
+            //알림매니저에게 채널 객체의 생성을 요청
+            notificationManager.createNotificationChannel(channel);
+
+            //알림건축가 객체 생성
+            builder=new NotificationCompat.Builder(this, channelID);
+
+
+        }else{
+            //알림 건축가 객체 생성
+            builder= new NotificationCompat.Builder(this, (Notification) null);
+        }
+
+        //건축가에게 원하는 알림의 설정작업
+        builder.setSmallIcon(android.R.drawable.ic_menu_view);
+
+        //상태바를 드래그하여 아래로 내리면 보이는
+        //알림창(확장 상태바)의 설정
+        builder.setContentTitle("Title");//알림창 제목
+        builder.setContentText("Messages....");//알림창 내용
+        builder.setStyle(new NotificationCompat.BigTextStyle()
+                .bigText(""));
+        //알림창의 큰 이미지
+        Bitmap bm= BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher);
+        builder.setLargeIcon(bm);//매개변수가 Bitmap을 줘야한다.
+
+        //건축가에게 알림 객체 생성하도록
+        Notification notification=builder.build();
+
+        //알림매니저에게 알림(Notify) 요청
+        notificationManager.notify(1, notification);
+
+        //알림 요청시에 사용한 번호를 알림제거 할 수 있음.
+        //notificationManager.cancel(1);
+    }
+
+    private void show() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"default");
+
+        builder.setSmallIcon(android.R.drawable.ic_menu_view);
+        builder.setContentTitle("알림 제목");
+        builder.setContentText("알림 세부 텍스트");
+
+        Intent intent = new Intent(this,MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+
+        builder.setContentIntent(pendingIntent);
+
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
+                R.mipmap.ic_launcher);
+        builder.setLargeIcon(largeIcon);
+
+        builder.setColor(Color.RED);
+
+        Uri ringtoneUri = RingtoneManager.getActualDefaultRingtoneUri(this,
+                RingtoneManager.TYPE_NOTIFICATION);
+        builder.setSound(ringtoneUri);
+
+        long[] vibrate = {0, 100, 200, 300};
+        builder.setVibrate(vibrate);
+        builder.setAutoCancel(true);
+
+        //중요한 기본채널 만들기 oncreate에서 작성해도 무방함
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            manager.createNotificationChannel(new NotificationChannel("defult", "기본 채널",
+                    NotificationManager.IMPORTANCE_DEFAULT));
+        }
+        manager.notify(1,builder.build());
+
+    }
+
+    public void removeNotification(View view) {
+        hide();
+
+    }
+
+    //id1번을 제거하겠다.
+    private void hide() {
+        NotificationManagerCompat.from(this).cancel(1);
+    }
 
 
     private void initJobScheduler() {

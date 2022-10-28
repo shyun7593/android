@@ -905,7 +905,7 @@ public class JobService extends android.app.job.JobService {
                             ac.put("subpath", inarray);
                             suttle.setFare(jsonobj.getInt("payment"));
                             suttle.setTotaltime(jsonobj.getInt("totalTime"));
-                            suttle.setPathtype(subpath.getInt("pathType"));
+                            suttle.setPathtype(0);
                             suttle.setSubpath(inarray.toString());
                             suttle.setStart(jsonobj.getString("firstStartStation"));
                             suttle.setTime(time);

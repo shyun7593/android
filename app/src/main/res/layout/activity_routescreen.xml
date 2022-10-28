@@ -5,11 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Routescreen">
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/extra_move"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:background="@drawable/rounded_button"
+            android:text="전체 경로 보기"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center"/>
         <TableLayout>
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -340,7 +340,7 @@ private DayTimeDao dayTimeDao;
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Toast.makeText(getApplicationContext(), "초기화를 완료하였습니다", Toast.LENGTH_SHORT).show();
 
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -386,7 +386,7 @@ private DayTimeDao dayTimeDao;
                                 mo8.setSelected(false);
 
 
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -436,7 +436,7 @@ private DayTimeDao dayTimeDao;
                                 mo7.setSelected(false);
                                 mo8.setSelected(false);
 
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -486,7 +486,7 @@ private DayTimeDao dayTimeDao;
                                 mo7.setSelected(false);
                                 mo8.setSelected(false);
 
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -534,7 +534,7 @@ private DayTimeDao dayTimeDao;
                                 mo6.setSelected(false);
                                 mo7.setSelected(false);
                                 mo8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -582,7 +582,7 @@ private DayTimeDao dayTimeDao;
                                 mo6.setSelected(false);
                                 mo7.setSelected(false);
                                 mo8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -630,7 +630,7 @@ private DayTimeDao dayTimeDao;
                                 mo6.setSelected(false);
                                 mo7.setSelected(false);
                                 mo8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -678,7 +678,7 @@ private DayTimeDao dayTimeDao;
                                 mo6.setSelected(true);
                                 mo7.setSelected(false);
                                 mo8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -726,7 +726,7 @@ private DayTimeDao dayTimeDao;
                                 mo6.setSelected(false);
                                 mo7.setSelected(true);
                                 mo8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -774,7 +774,7 @@ private DayTimeDao dayTimeDao;
                                 mo6.setSelected(false);
                                 mo7.setSelected(false);
                                 mo8.setSelected(true);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -827,7 +827,7 @@ private DayTimeDao dayTimeDao;
                                 tu7.setSelected(false);
                                 tu8.setSelected(false);
 
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -875,7 +875,7 @@ private DayTimeDao dayTimeDao;
                                 tu6.setSelected(false);
                                 tu7.setSelected(false);
                                 tu8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -923,7 +923,7 @@ private DayTimeDao dayTimeDao;
                                 tu6.setSelected(false);
                                 tu7.setSelected(false);
                                 tu8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -971,7 +971,7 @@ private DayTimeDao dayTimeDao;
                                 tu6.setSelected(false);
                                 tu7.setSelected(false);
                                 tu8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1019,7 +1019,7 @@ private DayTimeDao dayTimeDao;
                                 tu6.setSelected(false);
                                 tu7.setSelected(false);
                                 tu8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1067,7 +1067,7 @@ private DayTimeDao dayTimeDao;
                                 tu6.setSelected(false);
                                 tu7.setSelected(false);
                                 tu8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1115,7 +1115,7 @@ private DayTimeDao dayTimeDao;
                                 tu6.setSelected(true);
                                 tu7.setSelected(false);
                                 tu8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1163,7 +1163,7 @@ private DayTimeDao dayTimeDao;
                                 tu6.setSelected(false);
                                 tu7.setSelected(true);
                                 tu8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1211,7 +1211,7 @@ private DayTimeDao dayTimeDao;
                                 tu6.setSelected(false);
                                 tu7.setSelected(false);
                                 tu8.setSelected(true);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1262,7 +1262,7 @@ private DayTimeDao dayTimeDao;
                                 we6.setSelected(false);
                                 we7.setSelected(false);
                                 we8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1309,7 +1309,7 @@ private DayTimeDao dayTimeDao;
                                 we6.setSelected(false);
                                 we7.setSelected(false);
                                 we8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1356,7 +1356,7 @@ private DayTimeDao dayTimeDao;
                                 we6.setSelected(false);
                                 we7.setSelected(false);
                                 we8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1403,7 +1403,7 @@ private DayTimeDao dayTimeDao;
                                 we6.setSelected(false);
                                 we7.setSelected(false);
                                 we8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1450,7 +1450,7 @@ private DayTimeDao dayTimeDao;
                                 we6.setSelected(false);
                                 we7.setSelected(false);
                                 we8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1497,7 +1497,7 @@ private DayTimeDao dayTimeDao;
                                 we6.setSelected(false);
                                 we7.setSelected(false);
                                 we8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1544,7 +1544,7 @@ private DayTimeDao dayTimeDao;
                                 we6.setSelected(true);
                                 we7.setSelected(false);
                                 we8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1591,7 +1591,7 @@ private DayTimeDao dayTimeDao;
                                 we6.setSelected(false);
                                 we7.setSelected(true);
                                 we8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1638,7 +1638,7 @@ private DayTimeDao dayTimeDao;
                                 we6.setSelected(false);
                                 we7.setSelected(false);
                                 we8.setSelected(true);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1688,7 +1688,7 @@ private DayTimeDao dayTimeDao;
                                 th6.setSelected(false);
                                 th7.setSelected(false);
                                 th8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1735,7 +1735,7 @@ private DayTimeDao dayTimeDao;
                                 th6.setSelected(false);
                                 th7.setSelected(false);
                                 th8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1782,7 +1782,7 @@ private DayTimeDao dayTimeDao;
                                 th6.setSelected(false);
                                 th7.setSelected(false);
                                 th8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1829,7 +1829,7 @@ private DayTimeDao dayTimeDao;
                                 th6.setSelected(false);
                                 th7.setSelected(false);
                                 th8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1876,7 +1876,7 @@ private DayTimeDao dayTimeDao;
                                 th6.setSelected(false);
                                 th7.setSelected(false);
                                 th8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1923,7 +1923,7 @@ private DayTimeDao dayTimeDao;
                                 th6.setSelected(false);
                                 th7.setSelected(false);
                                 th8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -1970,7 +1970,7 @@ private DayTimeDao dayTimeDao;
                                 th6.setSelected(true);
                                 th7.setSelected(false);
                                 th8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2017,7 +2017,7 @@ private DayTimeDao dayTimeDao;
                                 th6.setSelected(false);
                                 th7.setSelected(true);
                                 th8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2064,7 +2064,7 @@ private DayTimeDao dayTimeDao;
                                 th6.setSelected(false);
                                 th7.setSelected(false);
                                 th8.setSelected(true);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2114,7 +2114,7 @@ private DayTimeDao dayTimeDao;
                                 fr6.setSelected(false);
                                 fr7.setSelected(false);
                                 fr8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2161,7 +2161,7 @@ private DayTimeDao dayTimeDao;
                                 fr6.setSelected(false);
                                 fr7.setSelected(false);
                                 fr8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2208,7 +2208,7 @@ private DayTimeDao dayTimeDao;
                                 fr6.setSelected(false);
                                 fr7.setSelected(false);
                                 fr8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2255,7 +2255,7 @@ private DayTimeDao dayTimeDao;
                                 fr6.setSelected(false);
                                 fr7.setSelected(false);
                                 fr8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2302,7 +2302,7 @@ private DayTimeDao dayTimeDao;
                                 fr6.setSelected(false);
                                 fr7.setSelected(false);
                                 fr8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2349,7 +2349,7 @@ private DayTimeDao dayTimeDao;
                                 fr6.setSelected(false);
                                 fr7.setSelected(false);
                                 fr8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2396,7 +2396,7 @@ private DayTimeDao dayTimeDao;
                                 fr6.setSelected(true);
                                 fr7.setSelected(false);
                                 fr8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2443,7 +2443,7 @@ private DayTimeDao dayTimeDao;
                                 fr6.setSelected(false);
                                 fr7.setSelected(true);
                                 fr8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2490,7 +2490,7 @@ private DayTimeDao dayTimeDao;
                                 fr6.setSelected(false);
                                 fr7.setSelected(false);
                                 fr8.setSelected(true);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2541,7 +2541,7 @@ private DayTimeDao dayTimeDao;
                                 sa6.setSelected(false);
                                 sa7.setSelected(false);
                                 sa8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2588,7 +2588,7 @@ private DayTimeDao dayTimeDao;
                                 sa6.setSelected(false);
                                 sa7.setSelected(false);
                                 sa8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2635,7 +2635,7 @@ private DayTimeDao dayTimeDao;
                                 sa6.setSelected(false);
                                 sa7.setSelected(false);
                                 sa8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2682,7 +2682,7 @@ private DayTimeDao dayTimeDao;
                                 sa6.setSelected(false);
                                 sa7.setSelected(false);
                                 sa8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2729,7 +2729,7 @@ private DayTimeDao dayTimeDao;
                                 sa6.setSelected(false);
                                 sa7.setSelected(false);
                                 sa8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2776,7 +2776,7 @@ private DayTimeDao dayTimeDao;
                                 sa6.setSelected(false);
                                 sa7.setSelected(false);
                                 sa8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2823,7 +2823,7 @@ private DayTimeDao dayTimeDao;
                                 sa6.setSelected(true);
                                 sa7.setSelected(false);
                                 sa8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2870,7 +2870,7 @@ private DayTimeDao dayTimeDao;
                                 sa6.setSelected(false);
                                 sa7.setSelected(true);
                                 sa8.setSelected(false);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
@@ -2917,7 +2917,7 @@ private DayTimeDao dayTimeDao;
                                 sa6.setSelected(false);
                                 sa7.setSelected(false);
                                 sa8.setSelected(true);
-                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "User_db4")  //final
+                                DayTimeDatabase db = Room.databaseBuilder(getApplicationContext(), DayTimeDatabase.class, "daytime.db")  //final
                                         .allowMainThreadQueries()          // main thread에서 db에 입출력 가능하게 함
                                         .fallbackToDestructiveMigration()  //스키마(Database) 버전 변경 가능
                                         .build();
