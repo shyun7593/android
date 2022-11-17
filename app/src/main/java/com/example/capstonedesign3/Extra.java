@@ -120,7 +120,7 @@ public class Extra extends AppCompatActivity {
             for (int j = 0; j < finalloutcities.size(); j++) {
                 TextView textViewout = new TextView(getApplicationContext());
                 DecimalFormat df = new DecimalFormat("###,###");
-                String money = df.format(finallincities.get(j).getFare());
+                String money = df.format(finalloutcities.get(j).getFare());
                 textViewout.setText(" 출발시간 : " +finalloutcities.get(j).getSchedule() + "\n 소요시간 : " + finalloutcities.get(j).getTotalTime() + "분\n"
                 +" 출발정류소 : " + finalloutcities.get(j).getStart() + " (" + finalloutcities.get(j).getStart() + "버스)\n" + money + "원");
                 textViewout.setTextSize(15);
