@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -117,6 +118,7 @@ public class Extra extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                       int a = finalI;
+                        Toast.makeText(getApplicationContext(), "변경 되었습니다.", Toast.LENGTH_SHORT).show();
                       inset(a);
                     }
                 });
@@ -144,6 +146,7 @@ public class Extra extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         int a = finalI;
+                        Toast.makeText(getApplicationContext(), "변경 되었습니다.", Toast.LENGTH_SHORT).show();
                         outset(a);
                     }
                 });
@@ -173,6 +176,7 @@ public class Extra extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             int a = finalI;
+                            Toast.makeText(getApplicationContext(), "변경 되었습니다.", Toast.LENGTH_SHORT).show();
                             inset(a);
                         }
                     });
@@ -202,6 +206,7 @@ public class Extra extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             int a = finalI;
+                            Toast.makeText(getApplicationContext(), "변경 되었습니다.", Toast.LENGTH_SHORT).show();
                             outset(a);
                         }
                     });

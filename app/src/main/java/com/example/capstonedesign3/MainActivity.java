@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity /*implements LocationListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // JobScheduler 등록(경로 수집)
-//        initJobScheduler();
+        initJobScheduler();
         alinitJobScheduler();
 
         /*tv_location = (TextView) findViewById(R.id.tv_location);
