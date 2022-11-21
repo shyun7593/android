@@ -1,13 +1,16 @@
 package com.example.capstonedesign3;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -107,6 +110,7 @@ public class Extra extends AppCompatActivity {
                 param.topMargin=20;
                 param.leftMargin = 10;
                 textViewin.setLayoutParams(param);
+
                 listView.addView(textViewin);
                 int finalI = i;
                 textViewin.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +126,7 @@ public class Extra extends AppCompatActivity {
                 DecimalFormat df = new DecimalFormat("###,###");
                 String money = df.format(finalloutcities.get(j).getFare());
                 textViewout.setText(" 출발시간 : " +finalloutcities.get(j).getSchedule() + "\n 소요시간 : " + finalloutcities.get(j).getTotalTime() + "분\n"
-                +" 출발정류소 : " + finalloutcities.get(j).getStart() + " (" + finalloutcities.get(j).getStart() + "버스)\n" + money + "원");
+                +" 출발정류소 : " + finalloutcities.get(j).getStart() + " (" + finalloutcities.get(j).getName() + ")\n" + money + "원");
                 textViewout.setTextSize(15);
                 Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.note_bg);
                 textViewout.setTypeface(null, Typeface.BOLD);
@@ -154,7 +158,7 @@ public class Extra extends AppCompatActivity {
                     +" 출발정류소 : " + finallincities.get(i).getStart() + " (" + finallincities.get(i).getName() + "버스)\n" + money + "원");
                     textViewin.setTextSize(15);
                     textViewin.setTypeface(null, Typeface.BOLD);
-                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.edge);
+                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.note_bg);
                     textViewin.setBackground(drawable);
                     textViewin.setPadding(0,0,0,15);
                     textViewin.setId(i);
@@ -182,7 +186,7 @@ public class Extra extends AppCompatActivity {
                     textViewout.setText(" 출발시간 : " +finalloutcities.get(j).getSchedule() + "\n 소요시간 : " + finalloutcities.get(j).getTotalTime() + "분\n"
                     +" 출발정류소 : " + finalloutcities.get(j).getStart() + " (" + finalloutcities.get(j).getStart() + "버스)\n" + money + "원");
                     textViewout.setTextSize(15);
-                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge);
+                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.note_bg);
                     textViewout.setBackground(drawable);
                     textViewout.setPadding(0,0,0,15);
                     textViewout.setTypeface(null, Typeface.BOLD);

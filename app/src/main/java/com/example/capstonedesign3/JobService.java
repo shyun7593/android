@@ -126,7 +126,7 @@ public class JobService extends android.app.job.JobService {
 
     @Override
     public boolean onStopJob(JobParameters params) {
-        Log.i("Jobservice", "Job Canceld");
+        Log.i("Jobservice", "Job Canceled");
         if (null != httpFunc) {
             if (!httpFunc.isCancelled()) {
                 httpFunc.cancel(false);

@@ -51,6 +51,7 @@ public class Routescreen extends AppCompatActivity {
     private Finalloutcity finalloutcity = new Finalloutcity();
     private SelectedRoute route = new SelectedRoute();
     private Button extra_move;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,10 +61,10 @@ public class Routescreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Routescreen.this, Extra.class);
-                startActivity(intent); // timescreen 이동
+                startActivity(intent); // Extra 이동
             }
         });
-        SelectedRouteDatabase routeDatabase = Room.databaseBuilder(getApplicationContext(),SelectedRouteDatabase.class,"selectedroute.db")
+        SelectedRouteDatabase routeDatabase = Room.databaseBuilder(getApplicationContext(), SelectedRouteDatabase.class, "selectedroute.db")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .build();
@@ -93,14 +94,15 @@ public class Routescreen extends AppCompatActivity {
                 break;
         }
         List<SelectedRoute> selectedRoutes = routeDao.getData(nowDay);
-        if(selectedRoutes.size()>0){
+        if (selectedRoutes.size() > 0) {
             ViewSelect();
         } else {
             ViewDefalut();
         }
     }
-    void ViewSelect(){
-        SelectedRouteDatabase routeDatabase = Room.databaseBuilder(getApplicationContext(),SelectedRouteDatabase.class,"selectedroute.db")
+
+    void ViewSelect() {
+        SelectedRouteDatabase routeDatabase = Room.databaseBuilder(getApplicationContext(), SelectedRouteDatabase.class, "selectedroute.db")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .build();
@@ -160,7 +162,7 @@ public class Routescreen extends AppCompatActivity {
             }
         });
         List<SelectedRoute> selectedRoutes = routeDao.getData(nowDay);
-        if (selectedRoutes.get(0).getFirstpath().equals("null")){
+        if (selectedRoutes.get(0).getFirstpath().equals("null")) {
             try {
                 JSONArray jsonArray = new JSONArray(selectedRoutes.get(0).getSubpath());
                 int i = jsonArray.length();
@@ -168,8 +170,8 @@ public class Routescreen extends AppCompatActivity {
                 String money = df.format(selectedRoutes.get(0).getFare());
                 int hour = (int) Math.floor((double) selectedRoutes.get(0).getTotalTitme() / 60);
                 int minute = selectedRoutes.get(0).getTotalTitme() % 60;
-                switch (selectedRoutes.get(0).getPathtype()){
-                    case 0 :
+                switch (selectedRoutes.get(0).getPathtype()) {
+                    case 0:
                         textView.setText("셔틀버스");
                         break;
                     case 1:
@@ -182,14 +184,21 @@ public class Routescreen extends AppCompatActivity {
                         textView.setText("버스+지하철");
                         break;
                 }
-                String t="";
-                if (selectedRoutes.get(0).getArrtime()!=null){
+                String t = "";
+                if (selectedRoutes.get(0).getArrtime() != null) {
                     t = selectedRoutes.get(0).getArrtime();
+                } else {
+                    t = "No";
                 }
                 textView2.setText("출발시간 : " + selectedRoutes.get(0).getSchedule());
                 if (jsonArray.getJSONObject(1).getString("type").equals("버스")) {
                     textView3.setText("출발정류소 : " + selectedRoutes.get(0).getStart() + " (" + selectedRoutes.get(0).getName() + " 버스)");
-                    textView4.setText("약 " +t+" 후 도착");
+                    if (t.equals("No")) {
+                        textView4.setText("실시간 정보 X");
+                    } else {
+                        textView4.setText("약 " + t + " 후 도착");
+                    }
+
                 } else {
                     textView3.setText("출발정류소 : " + selectedRoutes.get(0).getStart() + "역 (" + selectedRoutes.get(0).getName() + ")");
                 }
@@ -227,20 +236,27 @@ public class Routescreen extends AppCompatActivity {
                 JSONObject jsonObject2 = new JSONObject(selectedRoutes.get(0).getThirdpath());
                 JSONArray jsonArray1 = (JSONArray) jsonObject2.get("subpath");
                 JSONObject object1 = (JSONObject) jsonArray1.getJSONObject(1);
-                String t="";
-                if (selectedRoutes.get(0).getArrtime()!=null){
+                String t = "";
+                if (selectedRoutes.get(0).getArrtime() != null) {
                     t = selectedRoutes.get(0).getArrtime();
+                } else {
+                    t = "No";
                 }
                 textView.setText(selectedRoutes.get(0).getName());
                 textView2.setText("출발시간 : " + selectedRoutes.get(0).getSchedule());
-                if(object.get("type").equals("버스")){
+                if (object.get("type").equals("버스")) {
                     textView3.setText("출발정류소 : " + selectedRoutes.get(0).getStart() + " (" + object.get("name") + " 버스)");
-                    textView4.setText("약 " +t+" 후 도착");
+                    if (t.equals("No")) {
+                        textView4.setText("실시간 정보 X");
+                    } else {
+                        textView4.setText("약 " + t + " 후 도착");
+                    }
+
                 } else {
                     textView3.setText("출발정류소 : " + selectedRoutes.get(0).getStart() + " (" + object.get("name") + " 역)");
                 }
                 detail0.setText("소요시간 : " + hour + "시간 " + minute + "분" + "    요금 : " + money + "원");
-                if(object.get("type").equals("버스")){
+                if (object.get("type").equals("버스")) {
                     detail1.setText(jsonObject.get("start").toString() + " (" + object.get("name") + " 버스)");
                 } else {
                     detail1.setText(jsonObject.get("start").toString() + " (" + object.get("name") + " 역)");
@@ -261,6 +277,7 @@ public class Routescreen extends AppCompatActivity {
 
         }
     }
+
     void ViewDefalut() {
         String nowDay = "";
         switch (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
@@ -341,20 +358,27 @@ public class Routescreen extends AppCompatActivity {
                     JSONObject jsonObject2 = new JSONObject(finalloutcities.get(0).getThirdpath());
                     JSONArray jsonArray1 = (JSONArray) jsonObject2.get("subpath");
                     JSONObject object1 = (JSONObject) jsonArray1.getJSONObject(1);
-                    String t="";
-                    if (finalloutcities.get(0).getArrtime()!=null){
+                    String t = "";
+                    if (finalloutcities.get(0).getArrtime() != null) {
                         t = finalloutcities.get(0).getArrtime();
+                    } else {
+                        t = "No";
                     }
                     textView.setText(finalloutcities.get(0).getName());
                     textView2.setText("출발시간 : " + finalloutcities.get(0).getSchedule());
-                    if(object.get("type").equals("버스")){
+                    if (object.get("type").equals("버스")) {
                         textView3.setText("출발정류소 : " + finalloutcities.get(0).getStart() + " (" + object.get("name") + " 버스)");
-                        textView4.setText("약 " +t+" 후 도착");
+                        if(t.equals("No")){
+                            textView4.setText("실시간 정보 X");
+                        } else {
+                            textView4.setText("약 " + t + " 후 도착");
+                        }
+
                     } else {
                         textView3.setText("출발정류소 : " + finalloutcities.get(0).getStart() + " (" + object.get("name") + " 역)");
                     }
                     detail0.setText("소요시간 : " + hour + "시간 " + minute + "분" + "    요금 : " + money + "원");
-                    if(object.get("type").equals("버스")){
+                    if (object.get("type").equals("버스")) {
                         detail1.setText(jsonObject.get("start").toString() + " (" + object.get("name") + " 버스)");
                     } else {
                         detail1.setText(jsonObject.get("start").toString() + " (" + object.get("name") + " 역)");
@@ -380,11 +404,13 @@ public class Routescreen extends AppCompatActivity {
                     String money = df.format(finallincities.get(0).getFare());
                     int hour = (int) Math.floor((double) finallincities.get(0).getTotalTime() / 60);
                     int minute = finallincities.get(0).getTotalTime() % 60;
-                    String t="";
-                    if (finallincities.get(0).getArrtime()!=null){
+                    String t = "";
+                    if (finallincities.get(0).getArrtime() != null) {
                         t = finallincities.get(0).getArrtime();
+                    } else {
+                        t = "No";
                     }
-                    switch (finallincities.get(0).getPathtype()){
+                    switch (finallincities.get(0).getPathtype()) {
                         case 0:
                             textView.setText("셔틀버스");
                             break;
@@ -400,8 +426,13 @@ public class Routescreen extends AppCompatActivity {
                     }
                     textView2.setText("출발시간 : " + finallincities.get(0).getSchedule());
                     if (jsonArray.getJSONObject(1).getString("type").equals("버스")) {
-                        textView3.setText("출발정류소 : " + finallincities.get(0).getStart() + " (" + finallincities.get(0).getName() + " 버스)" );
-                        textView4.setText("약 " +t+" 후 도착");
+                        textView3.setText("출발정류소 : " + finallincities.get(0).getStart() + " (" + finallincities.get(0).getName() + " 버스)");
+                        if (t.equals("No")) {
+                            textView4.setText("실시간 정보 X");
+                        } else {
+                            textView4.setText("약 " + t + " 후 도착");
+                        }
+
                     } else {
                         textView3.setText("출발정류소 : " + finallincities.get(0).getStart() + "역 (" + finallincities.get(0).getName() + ")");
                     }
@@ -431,7 +462,7 @@ public class Routescreen extends AppCompatActivity {
             textView.setText("일정이 없습니다.");
             button.setVisibility(View.INVISIBLE);
         } else {
-            if (finallincities.size()>0){
+            if (finallincities.size() > 0) {
                 try {
                     JSONArray jsonArray = new JSONArray(finallincities.get(0).getSubpath());
                     int i = jsonArray.length();
@@ -439,11 +470,13 @@ public class Routescreen extends AppCompatActivity {
                     String money = df.format(finallincities.get(0).getFare());
                     int hour = (int) Math.floor((double) finallincities.get(0).getTotalTime() / 60);
                     int minute = finallincities.get(0).getTotalTime() % 60;
-                    String t="";
-                    if (finallincities.get(0).getArrtime()!=null){
+                    String t = "";
+                    if (finallincities.get(0).getArrtime() != null) {
                         t = finallincities.get(0).getArrtime();
+                    } else {
+                        t = "No";
                     }
-                    switch (finallincities.get(0).getPathtype()){
+                    switch (finallincities.get(0).getPathtype()) {
                         case 0:
                             textView.setText("셔틀버스");
                             break;
@@ -459,8 +492,13 @@ public class Routescreen extends AppCompatActivity {
                     }
                     textView2.setText("출발시간 : " + finallincities.get(0).getSchedule());
                     if (jsonArray.getJSONObject(1).getString("type").equals("버스")) {
-                        textView3.setText("출발정류소 : " + finallincities.get(0).getStart() + " (" + finallincities.get(0).getName() + " 버스)" );
-                        textView4.setText("약 " +t+" 후 도착");
+                        textView3.setText("출발정류소 : " + finallincities.get(0).getStart() + " (" + finallincities.get(0).getName() + " 버스)");
+                        if (t.equals("No")) {
+                            textView4.setText("실시간 정보 X");
+                        } else {
+                            textView4.setText("약 " + t + " 후 도착");
+                        }
+
                     } else {
                         textView3.setText("출발정류소 : " + finallincities.get(0).getStart() + "역 (" + finallincities.get(0).getName() + ")");
                     }
@@ -498,20 +536,26 @@ public class Routescreen extends AppCompatActivity {
                     JSONObject jsonObject2 = new JSONObject(finalloutcities.get(0).getThirdpath());
                     JSONArray jsonArray1 = (JSONArray) jsonObject2.get("subpath");
                     JSONObject object1 = (JSONObject) jsonArray1.getJSONObject(1);
-                    String t="";
-                    if (finalloutcities.get(0).getArrtime()!=null){
+                    String t = "";
+                    if (finalloutcities.get(0).getArrtime() != null) {
                         t = finalloutcities.get(0).getArrtime();
+                    } else {
+                        t = "No";
                     }
                     textView.setText(finalloutcities.get(0).getName());
                     textView2.setText("출발시간 : " + finalloutcities.get(0).getSchedule());
-                    if(object.get("type").equals("버스")){
+                    if (object.get("type").equals("버스")) {
                         textView3.setText("출발정류소 : " + finalloutcities.get(0).getStart() + " (" + object.get("name") + " 버스)");
-                        textView4.setText("약 " +t+" 후 도착");
+                        if (t.equals("No")) {
+                            textView4.setText("실시간 정보 X");
+                        } else {
+                            textView4.setText("약 " + t + " 후 도착");
+                        }
                     } else {
                         textView3.setText("출발정류소 : " + finalloutcities.get(0).getStart() + " (" + object.get("name") + " 역)");
                     }
                     detail0.setText("소요시간 : " + hour + "시간 " + minute + "분" + "    요금 : " + money + "원");
-                    if(object.get("type").equals("버스")){
+                    if (object.get("type").equals("버스")) {
                         detail1.setText(jsonObject.get("start").toString() + " (" + object.get("name") + " 버스)");
                     } else {
                         detail1.setText(jsonObject.get("start").toString() + " (" + object.get("name") + " 역)");
@@ -526,7 +570,7 @@ public class Routescreen extends AppCompatActivity {
                     detail5.setText(jsonObject2.get("start").toString() + " (" + object1.get("name") + " 버스)");
                     arrow5.setText("ↆ");
                     detail6.setText(jsonObject2.get("end").toString());
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.toString();
                 }
             }

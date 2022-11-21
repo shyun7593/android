@@ -60,20 +60,25 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity implements LocationListener  {
-    private static final int JOB_KEY = 101;
+public class MainActivity extends AppCompatActivity /*implements LocationListener 테스트*/  {
+    private static final int JOB_KEY1 = 101;
+    private static final int JOB_KEY2 = 102;
     private final int PERMISSION_REQUEST_RESULT = 100;
     private Button timescreen_move;
     private Button routescreen_move;
     private FinallincityDao finallincityDao;
     private FinalloutcityDao finalloutcityDao;
+
     Thread thread;
     boolean isThread = false;
-    TextView tv_location;
+/*    TextView tv_location;
     Button bt_my_location;
     Button thread_start, thread_stop;
+    테스트*/
 
 
     @Override
@@ -81,13 +86,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // JobScheduler 등록
+        // JobScheduler 등록(경로 수집)
 //        initJobScheduler();
-        tv_location = (TextView) findViewById(R.id.tv_location);
+        alinitJobScheduler();
+
+        /*tv_location = (TextView) findViewById(R.id.tv_location);
         bt_my_location = (Button) findViewById(R.id.bt_my_location);
         bt_my_location.setOnClickListener(onClickListener);
 
         requestPermissionLocation();
+        테스트*/
 
         timescreen_move = findViewById(R.id.timescreen_move);
         timescreen_move.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 startActivity(intent); // routescreen 이동
             }
         });
-        //스레드 시작
+        /*//스레드 시작
         thread_start = (Button) findViewById(R.id.thread_start);
         thread_start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,10 +145,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             }
         });
+        테스트*/
 
     }
 
-    View.OnClickListener onClickListener = new View.OnClickListener() {
+    /*View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
@@ -161,23 +170,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         } catch (SecurityException e) {
             e.printStackTrace();
         }
-
-
-        /*try {
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); //NETWORK_PROVIDER 실내에서 이걸로 해라
-            if (location != null) {
-                long now = System.currentTimeMillis();
-                Date date = new Date(now);
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd : HH-mm-ss");
-                String getTime = simpleDateFormat.format(date);
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                String msg = tv_location.getText().toString() + getTime + "\nlatitude:" + latitude + "\nlongitude:" + longitude + "\n---------------------\n";
-                tv_location.setText(msg);
-            }
-        }catch (SecurityException e){
-            e.printStackTrace();
-        }*/
     }
 
     public boolean requestPermissionLocation() {
@@ -236,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public void onProviderDisabled(@NonNull String provider) {
         LocationListener.super.onProviderDisabled(provider);
     }
+    테스트*/
 
 
     public void createNotification(View view) {
@@ -375,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             ComponentName componentName = new ComponentName(this, JobService.class);
 //            PersistableBundle bundle = new PersistableBundle();
 //            bundle.putInt("number", 10);
-            JobInfo.Builder builder = new JobInfo.Builder(JOB_KEY, componentName);
+            JobInfo.Builder builder = new JobInfo.Builder(JOB_KEY1, componentName);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 // 버전마다 기간등록하는방법이 다르다해서 이렇게 작성했습니다.
                 // 정확한건 더 찾아봐야 합니다.
@@ -394,13 +387,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             ComponentName componentName = new ComponentName(this, TimeService.class);
 //            PersistableBundle bundle = new PersistableBundle();
 //            bundle.putInt("number", 10);
-            JobInfo.Builder builder = new JobInfo.Builder(JOB_KEY, componentName);
+            JobInfo.Builder builder = new JobInfo.Builder(JOB_KEY2, componentName);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 // 버전마다 기간등록하는방법이 다르다해서 이렇게 작성했습니다.
                 // 정확한건 더 찾아봐야 합니다.
                 // 첫번째칸  간격 설정(최소시간 15분)
                 // 두번째칸 이 작업에 대한 밀리초 플렉스. Flex는 기간의 최소 또는 5% 중 더 높은 값으로 고정됩니다
-                builder.setPeriodic(360 * 60 * 1000, 20 * 60 * 1000);
+                builder.setPeriodic(15 * 60 * 1000, 20 * 60 * 1000);
             } else {
                 builder.setPeriodic(15 * 60 * 1000);
             }
